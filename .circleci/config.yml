@@ -74,11 +74,11 @@ workflows:
       - build-linux:
           requires:
             - test
-      - build-docker:
-          # Uncomment/modify context to use secrets (e.g., DockerHub credentials, etc.)
-          #context: dart-docker
-          requires:
-            - test
+      # - build-docker:
+      #     # Uncomment/modify context to use secrets (e.g., DockerHub credentials, etc.)
+      #     #context: dart-docker
+      #     requires:
+      #       - test
 
 ###################
 # Job Definitions #
