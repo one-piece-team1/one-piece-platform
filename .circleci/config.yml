@@ -32,11 +32,11 @@ commands:
       - run:
           name: Download deps
           shell: << parameters.shell >>
-          command: flutter pub get
+          command: pub get
       - run:
           name: Get junitreporter
           shell: << parameters.shell >>
-          command: flutter pub global activate junitreport
+          command: pub global activate junitreport
       - save_cache:
           key: v1.4-dependencies-{{ arch }}-{{ checksum "pubspec.lock" }}
           paths:
@@ -95,7 +95,7 @@ jobs:
           command: mkdir -p test-results/dart-tests
       - run:
           name: Run tests
-          command: flutter pub run test --reporter json | tojunit --output test-results/dart-tests/one_piece_platform_test-report.xml
+          command: pub run test --reporter json | tojunit --output test-results/dart-tests/one_piece_platform_test-report.xml
       - store_test_results:
           path: test-results
 
