@@ -53,9 +53,9 @@ commands:
       - run:
           name: Native compile
           shell: << parameters.shell >>
-          command: dart2native bin/server.dart -o one-piece-platform.exe
+          command: dart2native bin/server.dart -o one_piece_platform.exe
       - store_artifacts:
-          path: one-piece-platform.exe
+          path: one_piece_platform.exe
 
 ######################
 # Workflow Definition
@@ -95,7 +95,7 @@ jobs:
           command: mkdir -p test-results/dart-tests
       - run:
           name: Run tests
-          command: flutter pub run test --reporter json | tojunit --output test-results/dart-tests/one-piece-platform_test-report.xml
+          command: flutter pub run test --reporter json | tojunit --output test-results/dart-tests/one_piece_platform_test-report.xml
       - store_test_results:
           path: test-results
 
@@ -153,4 +153,4 @@ jobs:
   #     - checkout
   #     - run:
   #         name: Build & tag Docker image
-  #         command: docker build -t circleci/one-piece-platform -t circleci/one-piece-platform:${CIRCLE_SHA1} .
+  #         command: docker build -t circleci/one_piece_platform -t circleci/one_piece_platform:${CIRCLE_SHA1} .
