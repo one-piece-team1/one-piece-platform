@@ -1,9 +1,9 @@
 # Author @mvxt
 version: 2.1
 
-#####################
-# Common Definitions
-#####################
+######################
+# Common Definitions #
+######################
 
 # Orb declarations
 orbs:
@@ -80,9 +80,9 @@ workflows:
           requires:
             - test
 
-##################
-# Job Definitions
-##################
+###################
+# Job Definitions #
+###################
 jobs:
   test:
     docker:
