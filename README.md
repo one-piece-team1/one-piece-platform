@@ -2,6 +2,9 @@
 
 A new Flutter project.
 
+## PWA
+Deploy with surge](http://op-platform.surge.sh/#)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
