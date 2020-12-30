@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:one_piece_platform/screens/authentication/login_screen.dart';
+import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class OnePiecePlatform extends StatelessWidget {
     return MaterialApp(
       initialRoute: LoginScreen.id,
       routes: {
-        LoginScreen.id: (context)=>LoginScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
       },
     );
   }

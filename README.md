@@ -3,7 +3,7 @@
 A new Flutter project.
 
 ## PWA
-Deploy with surge](http://op-platform.surge.sh/#)
+Deploy on Heroku](https://one-piece-platform.herokuapp.com/)
 
 ## Getting Started
 
