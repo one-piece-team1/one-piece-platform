@@ -84,15 +84,15 @@ class AuthProvider with ChangeNotifier {
 
   static Future<FutureOr> onValue(Response response) async {
     var result;
-//   TODO: need to make sure the responseData is right
-    print(response);
     var responseData = response.data;
+    print("onValue responseData");
+    print(responseData.toString());
 
-    if (response.statusCode == 201) {
+    if (responseData["statusCode"] == 201) {
       result = {
         'status': true,
         'message': 'Successfully registered',
-        'data': responseData
+        'data': responseData["message"],
       };
     } else {
       result = {
@@ -106,7 +106,12 @@ class AuthProvider with ChangeNotifier {
   }
 
   static onError(error) {
-    print("the error is $error.detail");
-    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+    print("the error is `${error.toString()}`.detail");
+
+    return {
+      'status': false,
+      'message': 'Unsuccessful Request',
+      'data': error.toString()
+    };
   }
 }

@@ -1,3 +1,13 @@
+String validateUserName(String value) {
+  String _msg;
+  if (value.isEmpty) {
+    _msg = "Please enter user name";
+  } else if (value.length < 4) {
+    _msg = "User name length must greater than 4";
+  }
+  return _msg;
+}
+
 String validateEmail(String value) {
   String _msg;
   RegExp regex = new RegExp(
