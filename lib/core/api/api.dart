@@ -3,27 +3,16 @@ import 'package:one_piece_platform/core/models/auth_model.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 
 class BaseApi {
-//  Dio dio = Dio(options);
-  static const String localBaseURL = "http://localhost:8081/v1/api";
-  static const String liveBaseURL = "http://localhost:8081/v1/api";
+  static const String localBaseURL = "http://localhost:8080/v1/api";
+  static const String liveBaseURL = "http://localhost:8080/v1/api";
   static const String baseURL = localBaseURL;
   static const String userService = 'one-piece-user';
-
-//  static BaseOptions options = BaseOptions(
-//      baseUrl: baseURL,
-//      connectTimeout: 5000,
-//      receiveTimeout: 3000,
-//      contentType: 'JSON',
-//      headers: {
-//        "service-name": "one-piece-user",
-//      });
 
   Dio dioWithoutToken(String serviceName) {
     final BaseOptions baseOptions = new BaseOptions(
         baseUrl: baseURL,
         connectTimeout: 5000,
         receiveTimeout: 3000,
-        contentType: 'JSON',
         headers: {
           "service-name": serviceName,
         });
@@ -38,7 +27,6 @@ class BaseApi {
         baseUrl: baseURL,
         connectTimeout: 5000,
         receiveTimeout: 3000,
-        contentType: 'JSON',
         headers: {"service-name": serviceName, "Token": accessToken});
 
     return Dio(baseOptions);

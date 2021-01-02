@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class User {
   String userId;
   String username;
@@ -10,11 +8,11 @@ class User {
   //TODO: follow up to write the login function
   //https://medium.com/@afegbua/flutter-thursday-13-building-a-user-registration-and-login-process-with-provider-and-external-api-1bb87811fd1d
   User({
-    @required this.email,
-    @required this.username,
-    @required this.userId,
-    @required this.licence,
-    @required this.role,
+    this.email,
+    this.username,
+    this.userId,
+    this.licence,
+    this.role,
   });
 
   factory User.fromJson(Map<String, dynamic> responseData) {

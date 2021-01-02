@@ -67,7 +67,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> register(
       String userName, String email, String password) async {
-    final Map<String, dynamic> registrationData = {
+    final Map<String, String> registrationData = {
       'username': userName,
       'email': email,
       'password': password,
@@ -86,7 +86,7 @@ class AuthProvider with ChangeNotifier {
     var result;
 //   TODO: need to make sure the responseData is right
     print(response);
-    final Map<String, dynamic> responseData = response.data;
+    var responseData = response.data;
 
     if (response.statusCode == 201) {
       result = {
