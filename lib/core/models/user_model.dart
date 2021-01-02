@@ -7,10 +7,7 @@ class User {
   String licence;
   String role;
 
-//  String token;
-//  String refreshToken;
-
-  //TODO: follow up to write the login function\
+  //TODO: follow up to write the login function
   //https://medium.com/@afegbua/flutter-thursday-13-building-a-user-registration-and-login-process-with-provider-and-external-api-1bb87811fd1d
   User({
     @required this.email,
@@ -18,8 +15,6 @@ class User {
     @required this.userId,
     @required this.licence,
     @required this.role,
-//      this.token,
-//      this.refreshToken,
   });
 
   factory User.fromJson(Map<String, dynamic> responseData) {
@@ -28,9 +23,6 @@ class User {
         username: responseData['user']['username'],
         email: responseData['user']['email'],
         licence: responseData['user']['licence'],
-        role: responseData['user']['role']
-//        token: responseData['user']['token'],
-//        refreshToken: responseData['user']['refreshToken'],
-        );
+        role: responseData['user']['role']);
   }
 }
