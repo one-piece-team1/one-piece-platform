@@ -34,7 +34,7 @@ jobs:
       - run:
           command: flutter pub get
       - run:
-          command: bundle install
+          command: sudo bundle install
           working_directory: ios
       - run:
           name: Install CocoaPods Version
@@ -119,7 +119,7 @@ jobs:
       - run:
           command: flutter pub get
       - run:
-          command: bundle install
+          command: sudo bundle install
           working_directory: ios
       - run:
           name: Install CocoaPods Version
@@ -180,7 +180,7 @@ jobs:
       - restore_cache:
           key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
       - run:
-          command: bundle install
+          command: sudo bundle install
           working_directory: android
       - save_cache:
           key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
@@ -223,7 +223,7 @@ jobs:
       - restore_cache:
           key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
       - run:
-          command: bundle install
+          command: sudo bundle install
           working_directory: android
       - save_cache:
           key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
