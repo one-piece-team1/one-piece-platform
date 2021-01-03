@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:one_piece_platform/core/models/auth_model.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 
 class BaseApi {
@@ -21,13 +20,13 @@ class BaseApi {
   }
 
   Dio dioWithToken(String serviceName) {
-    Future<Auth> accessToken = UserPreferences().getToken();
+    String accessToken = UserPreferences().getToken;
 
     final BaseOptions baseOptions = new BaseOptions(
         baseUrl: baseURL,
         connectTimeout: 5000,
         receiveTimeout: 3000,
-        headers: {"service-name": serviceName, "Token": accessToken});
+        headers: {"service-name": serviceName, "Authorization": accessToken});
 
     return Dio(baseOptions);
   }

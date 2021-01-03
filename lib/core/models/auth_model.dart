@@ -7,9 +7,9 @@ class Auth {
     @required this.accessToken,
   });
 
-  factory Auth.fromJson(Map<String, dynamic> responseData) {
+  factory Auth.fromJson(String accessToken) {
     return Auth(
-      accessToken: responseData['accessToken'],
+      accessToken: accessToken,
     );
   }
 }

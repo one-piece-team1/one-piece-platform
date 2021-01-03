@@ -47,7 +47,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
-    final node = FocusScope.of(context);
 
     // jump between controls with 'tab' in flutter for web
     document.addEventListener('keydown', (dynamic event) {
@@ -89,11 +88,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 //      onSaved: (value) => _confirmPassword = value,
       obscureText: true,
       textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => node.unfocus(),
+      onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
       decoration: buildInputDecoration("Confirm password", Icons.lock),
     );
 
-    void _showSignInError(BuildContext context, PlatformException exception) {
+    void _showRegisterError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
         title: 'Sign in failed',
         exception: exception,
@@ -105,7 +104,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 //        await manager.signInWithGoogle();
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
-          _showSignInError(context, e);
+          _showRegisterError(context, e);
         }
       }
     }
@@ -115,7 +114,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 //        await manager.signInWithFacebook();
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
-          _showSignInError(context, e);
+          _showRegisterError(context, e);
         }
       }
     }
@@ -125,7 +124,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 ////        await manager.signInWithFacebook();
 //      } on PlatformException catch (e) {
 //        if (e.code != 'ERROR_ABORTED_BY_USER') {
-//          _showSignInError(context, e);
+//          _showRegisterError(context, e);
 //        }
 //      }
 //    }
@@ -156,17 +155,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (form.validate()) {
         form.save();
         await auth.register(_username, _email, _password).then((response) {
-          print("register response[data]");
-//          print(response["data"]);
           if (response['status']) {
-            print("register response[status]");
-
-////            TODO: getUser
-//            User user = response['data'];
-//            Provider.of<UserProvider>(context, listen: false).setUser(user);
-//            setState(() {
-//              showSpinner = false;
-//            });
             Navigator.pushReplacementNamed(context, LoginScreen.id);
           } else {
             setState(() {

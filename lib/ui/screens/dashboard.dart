@@ -14,7 +14,6 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<UserProvider>(context).user;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("DASHBOARD PAGE"),
@@ -25,7 +24,7 @@ class _DashBoardState extends State<DashBoard> {
           SizedBox(
             height: 100,
           ),
-          Center(child: Text(user.email)),
+          Center(child: Text(user.email ?? "no email")),
           SizedBox(height: 100),
           RaisedButton(
             onPressed: () {},

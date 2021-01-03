@@ -25,10 +25,11 @@ class AuthProvider with ChangeNotifier {
 
   Status get registeredStatus => _registeredStatus;
 
-  Future<Map<String, User>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     var result;
-    final Map<String, dynamic> loginData = {
-      'user': {'email': email, 'password': password}
+    final Map<String, String> loginData = {
+      'email': email,
+      'password': password
     };
 
     _loggedInStatus = Status.Authenticating;
@@ -36,15 +37,16 @@ class AuthProvider with ChangeNotifier {
 
     Response response = await UserApi().logInUser(loginData);
     var responseData = response.data;
+
     if (response.statusCode == 201) {
-      Auth token = Auth.fromJson(responseData.accessToken);
-      UserPreferences().saveToken(token);
+      Auth token = Auth.fromJson(responseData["accessToken"]);
+      UserPreferences().saveToken = token.accessToken;
 
 // get user's information
-      Response getUserRes = await UserApi().logInUser(loginData);
-      var getUserData = getUserRes.data.message;
-      User authUser = User.fromJson(getUserData.user);
-      UserPreferences().saveUser(authUser);
+      Response getUserRes = await UserApi().getUser(token);
+      var getUserData = getUserRes.data;
+      User authUser = User.fromJson(getUserData["message"]);
+      UserPreferences().saveUser = authUser;
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
 
@@ -85,8 +87,6 @@ class AuthProvider with ChangeNotifier {
   static Future<FutureOr> onValue(Response response) async {
     var result;
     var responseData = response.data;
-    print("onValue responseData");
-    print(responseData.toString());
 
     if (responseData["statusCode"] == 201) {
       result = {

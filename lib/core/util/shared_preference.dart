@@ -1,61 +1,54 @@
-import 'package:one_piece_platform/core/models/auth_model.dart';
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
-  Future<bool> saveToken(Auth auth) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('accessToken', "Bearer " + auth.accessToken);
+  static SharedPreferences _sharedPrefs;
+
+  init() async {
+    if (_sharedPrefs == null) {
+      _sharedPrefs = await SharedPreferences.getInstance();
+    }
+  }
+
+  set saveToken(String accessToken) {
+    _sharedPrefs.setString('accessToken', "Bearer " + accessToken);
     print("token preference");
   }
 
-  Future<bool> saveUser(User user) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString("userId", user.userId);
-    prefs.setString("username", user.username);
-    prefs.setString("email", user.email);
-    prefs.setString("licence", user.licence);
-    prefs.setString("role", user.role);
+  set saveUser(User user) {
+    _sharedPrefs.setString("id", user.id);
+    _sharedPrefs.setString("username", user.username);
+    _sharedPrefs.setString("email", user.email);
+    _sharedPrefs.setString("licence", user.licence);
+    _sharedPrefs.setString("role", user.role);
 
     print("user preference");
   }
 
   Future<User> getUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String userId = prefs.getString("userId");
-    String username = prefs.getString("username");
-    String email = prefs.getString("email");
-    String licence = prefs.getString("licence");
-    String role = prefs.getString("role");
+    String id = _sharedPrefs.getString("id");
+    String username = _sharedPrefs.getString("username");
+    String email = _sharedPrefs.getString("email");
+    String licence = _sharedPrefs.getString("licence");
+    String role = _sharedPrefs.getString("role");
 
     return User(
-        userId: userId,
-        username: username,
-        email: email,
-        licence: licence,
-        role: role);
+        id: id, username: username, email: email, licence: licence, role: role);
   }
 
-  void removeUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.remove("name");
-    prefs.remove("email");
-    prefs.remove("licence");
-    prefs.remove("role");
+  void removeUser() {
+    _sharedPrefs.remove("name");
+    _sharedPrefs.remove("email");
+    _sharedPrefs.remove("licence");
+    _sharedPrefs.remove("role");
   }
 
-  void removeAuth() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.remove("accessToken");
+  void removeAuth() {
+    _sharedPrefs.remove("accessToken");
   }
 
-  Future<Auth> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString("accessToken");
-    return Auth(accessToken: accessToken);
+  String get getToken {
+    String accessToken = _sharedPrefs.getString("accessToken") ?? "";
+    return accessToken;
   }
 }

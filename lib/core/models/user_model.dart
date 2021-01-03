@@ -1,5 +1,5 @@
 class User {
-  String userId;
+  String id;
   String username;
   String email;
   String licence;
@@ -10,14 +10,14 @@ class User {
   User({
     this.email,
     this.username,
-    this.userId,
+    this.id,
     this.licence,
     this.role,
   });
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
-        userId: responseData['user']['id'],
+        id: responseData['user']['id'],
         username: responseData['user']['username'],
         email: responseData['user']['email'],
         licence: responseData['user']['licence'],

@@ -5,7 +5,7 @@ import 'package:one_piece_platform/core/api/api.dart';
 import 'package:one_piece_platform/core/models/auth_model.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 
-final accessToken = UserPreferences().getToken();
+final accessToken = UserPreferences().getToken;
 
 class UserApi extends BaseApi {
   Future<Response> registerUser(Map<String, dynamic> data) async {

@@ -10,7 +10,10 @@ import 'package:provider/provider.dart';
 import 'core/models/user_model.dart';
 import 'core/util/shared_preference.dart';
 
-void main() {
+Future<void> main() async {
+  // init shared preferences for getter and setter
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserPreferences().init();
   runApp(OnePiecePlatform());
 }
 
@@ -38,12 +41,10 @@ class OnePiecePlatform extends StatelessWidget {
                 case ConnectionState.waiting:
                   return CircularProgressIndicator();
                 default:
-                  print("snapshot: ");
-                  print(snapshot);
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
                   else if (snapshot.data.userId == null)
-                    return RegistrationScreen();
+                    return LoginScreen();
                   else
                     UserPreferences().removeUser();
                   return Welcome(user: snapshot.data);
