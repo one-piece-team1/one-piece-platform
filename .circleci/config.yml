@@ -249,7 +249,7 @@ jobs:
       - checkout
       - run: flutter doctor
       - run: pub get
-      - run: flutter test --coverage
+      # - run: flutter test --coverage
 
 workflows:
   version: 2
@@ -261,22 +261,22 @@ workflows:
             - flutter_unit_tests
           filters:
             branches:
-              only: distribute_beta
+              only: develop
       - ios_distribute_beta:
           requires:
             - flutter_unit_tests
           filters:
             branches:
-              only: distribute_beta
+              only: develop
       - android_distribute_prod:
           requires:
             - flutter_unit_tests
           filters:
             branches:
-              only: distribute_prod
+              only: main
       - ios_distribute_prod:
           requires:
             - flutter_unit_tests
           filters:
             branches:
-              only: distribute_prod
+              only: main
