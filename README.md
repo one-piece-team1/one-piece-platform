@@ -2,6 +2,9 @@
 
 A new Flutter project.
 
+## PWA
+Deploy on Heroku](https://one-piece-platform.herokuapp.com/)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
