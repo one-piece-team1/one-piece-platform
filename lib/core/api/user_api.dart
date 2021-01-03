@@ -26,4 +26,10 @@ class UserApi extends BaseApi {
         .get(BaseApi.userBaseURL + '/info');
     return response;
   }
+
+  Future<Response> logout(String token) async {
+    Response response = await dioWithToken(BaseApi.userService)
+        .get(BaseApi.userBaseURL + '/logout');
+    return response;
+  }
 }

@@ -43,8 +43,10 @@ class OnePiecePlatform extends StatelessWidget {
                 default:
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
-                  else if (snapshot.data.userId == null)
+                  else if (snapshot.data.id == null)
                     return LoginScreen();
+                  else if (snapshot.data.id != null)
+                    return DashBoard();
                   else
                     UserPreferences().removeUser();
                   return Welcome(user: snapshot.data);

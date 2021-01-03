@@ -84,6 +84,26 @@ class AuthProvider with ChangeNotifier {
         .catchError(onError);
   }
 
+  Future<Map<String, dynamic>> logout() async {
+    String token = UserPreferences().getToken;
+    Response logoutRes = await UserApi().logout(token);
+    var logoutData = logoutRes.data;
+    if (logoutRes.statusCode == 200) {
+      _registeredStatus = Status.LoggedOut;
+      notifyListeners();
+      return {
+        'status': true,
+        'message': 'Successfully logged out',
+        'data': logoutData["message"],
+      };
+    }
+
+    return {
+      'status': false,
+      'message': 'Fail to log out',
+    };
+  }
+
   static Future<FutureOr> onValue(Response response) async {
     var result;
     var responseData = response.data;
