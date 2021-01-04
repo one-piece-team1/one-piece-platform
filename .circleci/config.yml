@@ -1,0 +1,282 @@
+version: 2.1
+jobs:
+  ios_distribute_beta:
+    macos:
+      xcode: "10.3.0"
+    working_directory: ~/flutter-app
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab"
+      - checkout:
+          path: ~/flutter-app
+      - restore_cache:
+          key: bundle-v2-{{ checksum "ios/Gemfile" }}-{{ arch }}
+      - run:
+          name: Setup environment variables
+          command: echo 'export PATH="$PATH:`pwd`/flutter/bin"'  >> $BASH_ENV
+      - run:
+          name: Download flutter SDK
+          command: if ! test -f "flutter_sdk.zip"; then curl -o flutter_sdk.zip https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.9.1+hotfix.4-stable.zip; fi
+      - run:
+          name: Unzip flutter SDK
+          command: unzip flutter_sdk.zip
+      - run:
+          name: Checking xcode version
+          command: xcodebuild -version
+      - run:
+          name: Set xcode path
+          command: sudo xcode-select -s /Applications/Xcode-10.3.app/Contents/Developer
+      - run:
+          name: Checking xcode path
+          command: xcode-select -p
+      - run: flutter upgrade
+      - run:
+          command: flutter pub get
+      - run:
+          command: sudo bundle install
+          working_directory: ios
+      - run:
+          name: Install CocoaPods Version
+          command: sudo gem install cocoapods
+      - run:
+          working_directory: ios
+          command: pod setup
+      - run:
+          name: Run pod install
+          working_directory: ios
+          command: pod install
+      - run:
+          name: Update CocoaPods
+          working_directory: ios
+          command: pod update
+      - save_cache:
+          key: bundle-v2-{{ checksum "ios/Gemfile" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Fastlane Match (certificates and provisioning profiles)
+          working_directory: ios
+          command: bundle exec fastlane setup_match_beta
+      - run:
+          name: Flutter doctor
+          command: flutter doctor
+      - run:
+          command: rm -rf ios/Flutter/Flutter.framework
+      - run:
+          command: flutter clean
+      - run:
+          command: flutter build ios --release --flavor beta --no-codesign --verbose
+          no_output_timeout: 20m
+      - run:
+          name: Create archive
+          working_directory: ios
+          command: xcodebuild -workspace ./Runner.xcworkspace -configuration Release-beta -scheme beta -destination 'generic/platform=iOS' -archivePath build/ios/iphoneos/Runner.xcarchive archive -allowProvisioningUpdates
+          no_output_timeout: 20m
+      - run:
+          name: Create IPA
+          working_directory: ios
+          command: xcodebuild -exportArchive -archivePath build/ios/iphoneos/Runner.xcarchive -exportPath build/ios/iphoneos -exportOptionsPlist exportOptions-prod.plist
+          no_output_timeout: 20m
+      - run:
+          working_directory: ios
+          command: bundle exec fastlane ios_distribute_beta
+          no_output_timeout: 20m
+      - store_artifacts:
+          path: ios/build
+
+  ios_distribute_prod:
+    macos:
+      xcode: "10.3.0"
+    working_directory: ~/flutter-app
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab:ab"
+      - checkout:
+          path: ~/flutter-app
+      - restore_cache:
+          key: bundle-v2-{{ checksum "ios/Gemfile" }}-{{ arch }}
+      - run:
+          name: Setup environment variables
+          command: echo 'export PATH="$PATH:`pwd`/flutter/bin"'  >> $BASH_ENV
+      - run:
+          name: Download flutter SDK
+          command: if ! test -f "flutter_sdk.zip"; then curl -o flutter_sdk.zip https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.9.1+hotfix.4-stable.zip; fi
+      - run:
+          name: Unzip flutter SDK
+          command: unzip flutter_sdk.zip
+      - run:
+          name: Checking xcode version
+          command: xcodebuild -version
+      - run:
+          name: Set xcode path
+          command: sudo xcode-select -s /Applications/Xcode-10.3.app/Contents/Developer
+      - run:
+          name: Checking xcode path
+          command: xcode-select -p
+      - run: flutter upgrade
+      - run:
+          command: flutter pub get
+      - run:
+          command: sudo bundle install
+          working_directory: ios
+      - run:
+          name: Install CocoaPods Version
+          command: sudo gem install cocoapods
+      - run:
+          working_directory: ios
+          command: pod setup
+      - run:
+          name: Run pod install
+          working_directory: ios
+          command: pod install
+      - run:
+          name: Update CocoaPods
+          working_directory: ios
+          command: pod update
+      - save_cache:
+          key: bundle-v2-{{ checksum "ios/Gemfile" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Fastlane Match (certificates and provisioning profiles)
+          working_directory: ios
+          command: bundle exec fastlane setup_match_prod
+      - run:
+          name: Flutter doctor
+          command: flutter doctor
+      - run:
+          command: rm -rf ios/Flutter/Flutter.framework
+      - run:
+          command: flutter clean
+      - run:
+          command: flutter build ios --release --flavor production --no-codesign --verbose
+          no_output_timeout: 20m
+      - run:
+          name: Create archive
+          working_directory: ios
+          command: xcodebuild -workspace ./Runner.xcworkspace -configuration Release-production -scheme production -destination 'generic/platform=iOS' -archivePath build/ios/iphoneos/Runner.xcarchive archive -allowProvisioningUpdates
+          no_output_timeout: 20m
+      - run:
+          name: Create IPA
+          working_directory: ios
+          command: xcodebuild -exportArchive -archivePath build/ios/iphoneos/Runner.xcarchive -exportPath build/ios/iphoneos -exportOptionsPlist exportOptions-prod.plist
+          no_output_timeout: 20m
+      - store_artifacts:
+          path: ios/build
+
+  android_distribute_beta:
+    docker:
+      - image: cirrusci/flutter
+    working_directory: ~/flutter-app
+    steps:
+      - checkout:
+          path: ~/flutter-app
+      - run: flutter pub get
+      - run:
+          name: Flutter doctor
+          command: flutter doctor -v
+      - restore_cache:
+          key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
+      - run:
+          command: sudo bundle install
+          working_directory: android
+      - save_cache:
+          key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Removing .gradle dir
+          command: sudo rm -rf android/.gradle
+      - run:
+          name: Setup Environment Variables
+          working_directory: android
+          command: ./ci_environment_setup.sh copyEnvVarsToGradleProperties
+      - run:
+          name: Build Android APK
+          command: flutter build apk --flavor uat
+      - run:
+          name: Copy Android artifacts
+          command: |
+            mkdir -p build_results/android
+            cp -r build/app/outputs/apk/uat/release build_results/android
+      - run:
+          working_directory: android
+          command: bundle exec fastlane android_distribute_uat
+      - store_artifacts:
+          path: build_results/android
+      - store_test_results:
+          path: build_results/android
+
+  android_distribute_prod:
+    docker:
+      - image: cirrusci/flutter
+    working_directory: ~/flutter-app
+    steps:
+      - checkout:
+          path: ~/flutter-app
+      - run: flutter pub get
+      - run:
+          name: Flutter doctor
+          command: flutter doctor -v
+      - restore_cache:
+          key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
+      - run:
+          command: sudo bundle install
+          working_directory: android
+      - save_cache:
+          key: bundle-v1-{{ checksum "android/Gemfile" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Removing .gradle dir
+          command: sudo rm -rf android/.gradle
+      - run:
+          name: Setup Environment Variables
+          working_directory: android
+          command: ./ci_environment_setup.sh copyEnvVarsToGradleProperties
+      - run:
+          name: Build Android APK
+          command: flutter build apk --flavor production
+      - store_artifacts:
+          path: build/app/outputs/apk/production/release
+
+  flutter_unit_tests:
+    docker:
+      - image: cirrusci/flutter
+    steps:
+      - checkout
+      - run: flutter doctor
+      - run: flutter pub get
+      # - run: flutter test --coverage
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - flutter_unit_tests
+      - android_distribute_beta:
+          requires:
+            - flutter_unit_tests
+          filters:
+            branches:
+              only: develop
+      - ios_distribute_beta:
+          requires:
+            - flutter_unit_tests
+          filters:
+            branches:
+              only: develop
+      - android_distribute_prod:
+          requires:
+            - flutter_unit_tests
+          filters:
+            branches:
+              only: main
+      - ios_distribute_prod:
+          requires:
+            - flutter_unit_tests
+          filters:
+            branches:
+              only: main
