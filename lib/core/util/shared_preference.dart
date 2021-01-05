@@ -1,5 +1,6 @@
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class UserPreferences {
   static SharedPreferences _sharedPrefs;

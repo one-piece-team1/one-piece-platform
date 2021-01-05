@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
