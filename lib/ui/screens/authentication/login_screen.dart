@@ -1,12 +1,15 @@
-import 'dart:html';
 import 'dart:async';
+import 'dart:html';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:one_piece_platform/core/api/api.dart';
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
+import 'package:one_piece_platform/core/util/firebase_auth.dart';
 import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart';
@@ -25,14 +28,18 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
   bool showSpinner = false;
+
   final formKey = new GlobalKey<FormState>();
+  BaseApi baseApi = new BaseApi();
 
   FocusNode _emailFocusNode;
   FocusNode _passwordFocusNode;
 
+  bool _passwordVisible;
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
   }
@@ -63,29 +70,50 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) => _email = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("Email", Icons.email),
+      decoration: buildInputDecoration("輸入你的Email", null),
     );
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_passwordVisible,
       validator: validatePassword,
       onSaved: (value) => _password = value,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
-      decoration: buildInputDecoration("Password", Icons.lock),
+      decoration: InputDecoration(
+        hintText: '請輸入你的密碼',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _passwordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+        ),
+      ),
     );
 
     void _showSignInError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
-        title: 'Sign in failed',
+        title: '登入失敗',
         exception: exception,
       ).show(context);
     }
 
     Future<void> _signInWithGoogle(BuildContext context) async {
       try {
-//        await manager.signInWithGoogle();
+        await signInWithGoogle(context).then((result) {
+          print('sign in google result $result');
+          // TODO: need to send the user's data to our backend
 
+          Navigator.pushNamed(context, DashBoard.id);
+        }).catchError((error) {
+          print('_signInWithGoogle Error: $error');
+        });
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showSignInError(context, e);
@@ -95,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Future<void> _signInWithFacebook(BuildContext context) async {
       try {
-//        await manager.signInWithFacebook();
+        await baseApi.launchOAuthURL('facebook');
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showSignInError(context, e);
@@ -191,20 +219,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 48.0,
                 ),
                 Text(
-                  'CONNECT WITH',
+                  '使用以下連結登入',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    height: 1.0,
                     fontSize: 20.0,
                     color: Colors.grey[700],
                   ),
                 ),
-                Divider(),
+                SizedBox(
+                  height: 48.0,
+                ),
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       googleOAuth,
-                      fbOAuth,
+//                      fbOAuth,
 //                appleOAuth,
                     ],
                   ),

@@ -1,16 +1,21 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:one_piece_platform/core/api/api.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
+import 'package:one_piece_platform/core/util/firebase_auth.dart';
 import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart';
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../dashboard.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration';
@@ -27,9 +32,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   FocusNode _passwordFocusNode;
   FocusNode _confirmPasswordFocusNode;
 
+  bool _passwordVisible;
+  bool _confirmPasswordVisible;
+
+  BaseApi baseApi = new BaseApi();
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
+    _confirmPasswordVisible = false;
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
     _confirmPasswordFocusNode = FocusNode();
@@ -62,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onSaved: (value) => _username = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
-      decoration: buildInputDecoration("User name", Icons.person),
+      decoration: buildInputDecoration("輸入你的使用者名稱", null),
     );
     final emailField = TextFormField(
       autofocus: false,
@@ -71,37 +82,73 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onSaved: (value) => _email = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("Email", Icons.email),
+      decoration: buildInputDecoration("輸入你的Email", null),
     );
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: !_passwordVisible,
       validator: validatePassword,
       onSaved: (value) => _password = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("Password", Icons.lock),
+      decoration: InputDecoration(
+        hintText: '請輸入你的密碼',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _passwordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+        ),
+      ),
     );
     final confirmPassword = TextFormField(
       autofocus: false,
-      validator: (value) => value.isEmpty ? "Your password is required" : null,
-//      onSaved: (value) => _confirmPassword = value,
-      obscureText: true,
+      validator: (value) => validateConfirmPassword(value, _password),
+      obscureText: !_confirmPasswordVisible,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
+      decoration: InputDecoration(
+        hintText: '再次輸入你的密碼',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            setState(() {
+              _confirmPasswordVisible = !_confirmPasswordVisible;
+            });
+          },
+        ),
+      ),
     );
 
     void _showRegisterError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
-        title: 'Sign in failed',
+        title: '註冊失敗',
         exception: exception,
       ).show(context);
     }
 
     Future<void> _signInWithGoogle(BuildContext context) async {
       try {
-//        await manager.signInWithGoogle();
+        await signInWithGoogle(context).then((result) {
+          print('sign in google result $result');
+          // TODO: need to send the user's data to our backend
+
+          Navigator.pushNamed(context, DashBoard.id);
+        }).catchError((error) {
+          print('_signInWithGoogle Error: $error');
+        });
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showRegisterError(context, e);
@@ -111,7 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     Future<void> _signInWithFacebook(BuildContext context) async {
       try {
-//        await manager.signInWithFacebook();
+        await baseApi.launchOAuthURL('facebook');
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showRegisterError(context, e);
@@ -134,11 +181,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       color: Colors.white,
       onPressed: () => _signInWithGoogle(context),
     );
-    final fbOAuth = SocialSignInButton(
-      assetName: 'images/facebook-logo.png',
-      color: Color(0xFF334D92),
-      onPressed: () => _signInWithFacebook(context),
-    );
+//    final fbOAuth = SocialSignInButton(
+//      assetName: 'images/facebook-logo.png',
+//      color: Color(0xFF334D92),
+//      onPressed: () => _signInWithFacebook(context),
+//    );
 
     // TODO: apple sign in
 //    final appleOAuth =  SocialSignInButton(
@@ -162,7 +209,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               showSpinner = false;
             });
             Flushbar(
-              title: "Registration Failed",
+              title: "註冊失敗",
               message: response["data"].toString(),
               duration: Duration(seconds: 3),
             ).show(context);
@@ -173,8 +220,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           showSpinner = false;
         });
         Flushbar(
-          title: "Invalid form",
-          message: "Please Complete the form properly",
+          title: "欄位內容有誤",
+          message: "請完成欄位",
           duration: Duration(seconds: 3),
         ).show(context);
       }
@@ -206,9 +253,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 48.0,
                   ),
                   Text(
-                    'CONNECT WITH',
+                    '使用以下連結註冊',
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      height: 1.0,
                       fontSize: 20.0,
                       color: Colors.grey[700],
                     ),
@@ -219,7 +267,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         googleOAuth,
-                        fbOAuth,
+//                        fbOAuth, // fb signIn not support in Flutter web
 //                appleOAuth,
                       ],
                     ),
@@ -228,7 +276,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Row(children: <Widget>[
                     Expanded(child: Divider()),
                     Text(
-                      'OR',
+                      '或',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20.0,
@@ -238,7 +286,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Expanded(child: Divider()),
                   ]),
                   SizedBox(height: 15.0),
-                  label("User Name"),
+                  label("使用者名稱"),
                   SizedBox(
                     height: 8.0,
                   ),
@@ -250,16 +298,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   emailField,
                   SizedBox(height: 15.0),
-                  label("Password"),
+                  label("密碼"),
                   SizedBox(
                     height: 8.0,
                   ),
                   passwordField,
                   SizedBox(height: 15.0),
-                  label("Confirm Password"),
+                  label("確認密碼"),
                   confirmPassword,
                   SizedBox(height: 20.0),
-                  longButtons("Register", doRegister),
+                  longButtons("註冊", doRegister),
                 ],
               ),
             ),

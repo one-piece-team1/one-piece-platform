@@ -26,20 +26,21 @@ dynamic get apiBaseUrl {
 }
 
 dynamic get apiOAuthBaseUrl {
+  print('_config $_config');
   return _config[_oAuthBaseUrl];
 }
 
 Map<String, dynamic> devConstants = {
   _baseUrl: "http://localhost:8080/v1/api",
-  _oAuthBaseUrl: "http://localhost:7071/v1/api"
+  _oAuthBaseUrl: "http://localhost:7071/users"
 };
 
 Map<String, dynamic> stageConstants = {
   _baseUrl: "http://localhost:8080/v1/api",
-  _oAuthBaseUrl: "http://localhost:7071/v1/api"
+  _oAuthBaseUrl: "http://localhost:7071/users"
 };
 
 Map<String, dynamic> prodConstants = {
   _baseUrl: "http://localhost:8080/v1/api",
-  _oAuthBaseUrl: "http://localhost:7071/v1/api"
+  _oAuthBaseUrl: "http://localhost:7071/users"
 };

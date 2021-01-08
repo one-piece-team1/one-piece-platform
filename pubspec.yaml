@@ -33,6 +33,13 @@ dependencies:
   shared_preferences: ^0.5.12+4
   dio: ^3.0.1
   flushbar: ^1.10.4
+  url_launcher: ^5.7.10
+  firebase_auth: ^0.18.4+1
+  firebase_core: ^0.5.3
+  google_sign_in: ^4.5.3
+
+
+
 
 
 

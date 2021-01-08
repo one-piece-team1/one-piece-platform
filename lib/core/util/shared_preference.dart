@@ -16,6 +16,10 @@ class UserPreferences {
     print("token preference");
   }
 
+  set isAuth(bool isAuth) {
+    _sharedPrefs.setBool("auth", isAuth);
+  }
+
   set saveUser(User user) {
     _sharedPrefs.setString("id", user.id);
     _sharedPrefs.setString("username", user.username);
@@ -38,6 +42,7 @@ class UserPreferences {
   }
 
   void removeUser() {
+    _sharedPrefs.remove("auth");
     _sharedPrefs.remove("name");
     _sharedPrefs.remove("email");
     _sharedPrefs.remove("licence");
