@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:html';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -13,7 +12,10 @@ import 'package:one_piece_platform/core/util/firebase_auth.dart';
 import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart';
+import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
+import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import '../dashboard.dart';
@@ -36,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FocusNode _passwordFocusNode;
 
   bool _passwordVisible;
+
   @override
   void initState() {
     super.initState();
@@ -72,30 +75,18 @@ class _LoginScreenState extends State<LoginScreen> {
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
       decoration: buildInputDecoration("輸入你的Email", null),
     );
-    final passwordField = TextFormField(
-      autofocus: false,
-      obscureText: !_passwordVisible,
-      validator: validatePassword,
-      onSaved: (value) => _password = value,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
-      decoration: InputDecoration(
+    final passwordField = TextFormFieldInput(
+        visible: _passwordVisible,
+        validationMsg: validatePassword,
+        onSaved: (value) => _password = value,
+        textInputActionStatus: TextInputAction.done,
+        onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
         hintText: '請輸入你的密碼',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
-        ),
-      ),
-    );
+        iconButtonOnPressed: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        });
 
     void _showSignInError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
@@ -176,22 +167,24 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               showSpinner = false;
             });
-            Flushbar(
-              title: "Login Failed",
-              message: response["data"].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
+            showOverlayNotification((context) {
+              return NotificationContent(
+                title: "Login Failed",
+                subtitle: response["data"].toString(),
+              );
+            }, duration: kNotificationDuration);
           }
         });
       } else {
         setState(() {
           showSpinner = false;
         });
-        Flushbar(
-          title: "Invalid form",
-          message: "Please Complete the form properly",
-          duration: Duration(seconds: 3),
-        ).show(context);
+        showOverlayNotification((context) {
+          return NotificationContent(
+            title: "Invalid form",
+            subtitle: "Please Complete the form properly",
+          );
+        }, duration: kNotificationDuration);
       }
     };
     return Scaffold(

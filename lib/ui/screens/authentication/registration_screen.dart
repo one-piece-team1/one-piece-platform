@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:html';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -11,8 +10,11 @@ import 'package:one_piece_platform/core/util/firebase_auth.dart';
 import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart';
+import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
+import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import '../dashboard.dart';
@@ -36,6 +38,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool _confirmPasswordVisible;
 
   BaseApi baseApi = new BaseApi();
+
   @override
   void initState() {
     super.initState();
@@ -84,53 +87,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
       decoration: buildInputDecoration("輸入你的Email", null),
     );
-    final passwordField = TextFormField(
-      autofocus: false,
-      obscureText: !_passwordVisible,
-      validator: validatePassword,
-      onSaved: (value) => _password = value,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
-      decoration: InputDecoration(
+    final passwordField = TextFormFieldInput(
+        visible: _passwordVisible,
+        validationMsg: validatePassword,
+        onSaved: (value) => _password = value,
+        textInputActionStatus: TextInputAction.done,
+        onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
         hintText: '請輸入你的密碼',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
-        ),
-      ),
-    );
-    final confirmPassword = TextFormField(
-      autofocus: false,
-      validator: (value) => validateConfirmPassword(value, _password),
-      obscureText: !_confirmPasswordVisible,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
-      decoration: InputDecoration(
+        iconButtonOnPressed: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        });
+
+    final confirmPassword = TextFormFieldInput(
+        visible: _confirmPasswordVisible,
+        validationMsg: (value) => validateConfirmPassword(value, _password),
+        onSaved: (value) => _password = value,
+        textInputActionStatus: TextInputAction.done,
+        onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
         hintText: '再次輸入你的密碼',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            setState(() {
-              _confirmPasswordVisible = !_confirmPasswordVisible;
-            });
-          },
-        ),
-      ),
-    );
+        iconButtonOnPressed: () {
+          setState(() {
+            _confirmPasswordVisible = !_confirmPasswordVisible;
+          });
+        });
 
     void _showRegisterError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
@@ -208,22 +189,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             setState(() {
               showSpinner = false;
             });
-            Flushbar(
-              title: "註冊失敗",
-              message: response["data"].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
+            showOverlayNotification((context) {
+              return NotificationContent(
+                title: "Registration failed",
+                subtitle: response["data"].toString(),
+              );
+            }, duration: kNotificationDuration);
           }
         });
       } else {
         setState(() {
           showSpinner = false;
         });
-        Flushbar(
-          title: "欄位內容有誤",
-          message: "請完成欄位",
-          duration: Duration(seconds: 3),
-        ).show(context);
+        showOverlayNotification((context) {
+          return NotificationContent(
+            title: "Invalid form",
+            subtitle: "Please Complete the form properly",
+          );
+        }, duration: kNotificationDuration);
+//        Flushbar(
+//          title: "The form input is invalid",
+//          message: "Please finish the inputs",
+//          ,
+//        ).show(context);
       }
     };
 

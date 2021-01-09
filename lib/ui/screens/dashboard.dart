@@ -1,11 +1,12 @@
-import 'package:flushbar/flushbar.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
+import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 class DashBoard extends StatefulWidget {
@@ -39,11 +40,12 @@ class _DashBoardState extends State<DashBoard> {
           Navigator.of(context).pushNamedAndRemoveUntil(
               LoginScreen.id, (Route<dynamic> route) => false);
         } else {
-          Flushbar(
-            title: "Logout Failed",
-            message: response["message"].toString(),
-            duration: Duration(seconds: 3),
-          ).show(context);
+          showOverlayNotification((context) {
+            return NotificationContent(
+              title: "Logout Failed",
+              subtitle: response["data"].toString(),
+            );
+          }, duration: kNotificationDuration);
         }
       });
     };
