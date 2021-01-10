@@ -6,7 +6,6 @@ enum Environment { dev, stage, prod }
 Map<String, dynamic> _config;
 
 void setEnvironment(Environment env) {
-  print('env $env');
   switch (env) {
     case Environment.dev:
       _config = devConstants;
