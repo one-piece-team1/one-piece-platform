@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
+import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
@@ -61,6 +62,7 @@ class OnePiecePlatform extends StatelessWidget {
             LoginScreen.id: (context) => LoginScreen(),
             RegistrationScreen.id: (context) => RegistrationScreen(),
             DashBoard.id: (context) => DashBoard(),
+            ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
           },
         ),
       ),

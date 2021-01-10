@@ -35,6 +35,19 @@ String validatePassword(String value) {
   return _msg;
 }
 
+String validateNewPassword(String value) {
+  String _msg;
+  RegExp regex =
+      new RegExp(r'^((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$');
+  if (!regex.hasMatch(value)) {
+    _msg = "密碼必須包含英文大小寫及數字";
+//        "Password must contain characters with uppercase, lowercase and numbers";
+  } else if (value.length < 8) {
+    _msg = '密碼長度須大於8';
+  }
+  return _msg;
+}
+
 String validateConfirmPassword(String value, String password) {
   String _msg;
   RegExp regex =

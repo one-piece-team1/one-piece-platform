@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -13,6 +14,7 @@ import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart
 import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
 import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
+import 'package:one_piece_platform/ui/constants.dart' as k;
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +62,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
     // jump between controls with 'tab' in flutter for web
@@ -194,7 +198,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 title: "Registration failed",
                 subtitle: response["data"].toString(),
               );
-            }, duration: kNotificationDuration);
+            }, duration: k.kNotificationDuration);
           }
         });
       } else {
@@ -206,7 +210,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             title: "Invalid form",
             subtitle: "Please Complete the form properly",
           );
-        }, duration: kNotificationDuration);
+        }, duration: k.kNotificationDuration);
 //        Flushbar(
 //          title: "The form input is invalid",
 //          message: "Please finish the inputs",
@@ -218,86 +222,152 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
+        extendBodyBehindAppBar: true,
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Flexible(
-                    child: Hero(
-                      tag: 'logo',
-                      child: Container(
-                        height: 200.0,
-                        child: Image.asset('images/logo.png'),
-                      ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: screenSize.height * 0.3,
+                  color: Colors.grey[600],
+                ),
+                Form(
+                  key: formKey,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenSize.height * 0.06,
                     ),
-                  ),
-                  SizedBox(
-                    height: 48.0,
-                  ),
-                  Text(
-                    '使用以下連結註冊',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      height: 1.0,
-                      fontSize: 20.0,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  Divider(),
-                  Center(
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        googleOAuth,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          height: screenSize.height * 0.25,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            height: screenSize.height * 0.1,
+                            child: Image.asset('images/logo.png'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: screenSize.height * 0.05,
+                        ),
+                        Text(
+                          '使用以下連結註冊',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            height: 1.0,
+                            fontSize: screenSize.height * 0.02,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(
+                          height: screenSize.height * 0.01,
+                        ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              googleOAuth,
 //                        fbOAuth, // fb signIn not support in Flutter web
 //                appleOAuth,
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        Row(children: <Widget>[
+                          Expanded(child: Divider()),
+                          Text(
+                            '或',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: screenSize.height * 0.025,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Expanded(child: Divider()),
+                        ]),
+                        SizedBox(height: screenSize.height * 0.02),
+                        label("使用者名稱"),
+                        SizedBox(
+                          height: screenSize.height * 0.01,
+                        ),
+                        usernameField,
+                        SizedBox(height: screenSize.height * 0.02),
+                        label("Email"),
+                        SizedBox(
+                          height: screenSize.height * 0.01,
+                        ),
+                        emailField,
+                        SizedBox(height: screenSize.height * 0.02),
+                        label("密碼"),
+                        SizedBox(height: screenSize.height * 0.01),
+                        passwordField,
+                        SizedBox(height: screenSize.height * 0.02),
+                        label("確認密碼"),
+                        SizedBox(height: screenSize.height * 0.01),
+                        confirmPassword,
+                        SizedBox(height: screenSize.height * 0.025),
+                        longButtons("Register", doRegister),
+                        SizedBox(height: screenSize.height * 0.02),
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              style: k.kTextDefaultStyle,
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text:
+                                        'By clicking Sign Up, you agree to our '),
+                                TextSpan(
+                                    text: 'Terms of Service',
+                                    style: k.kLinkStyle,
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        print('Terms of Service');
+                                      }),
+                                TextSpan(text: ' and that you have read our '),
+                                TextSpan(
+                                    text: 'Privacy Policy',
+                                    style: k.kLinkStyle,
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        print('Privacy Policy');
+                                      }),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.01),
+                        Divider(),
+                        SizedBox(height: screenSize.height * 0.01),
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              style: k.kTextDefaultStyle,
+                              children: <TextSpan>[
+                                TextSpan(text: '已有帳號?  '),
+                                TextSpan(
+                                    text: '登入',
+                                    style: k.kLinkStyle,
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.pushNamed(
+                                            context, LoginScreen.id);
+                                      }),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.05),
                       ],
                     ),
                   ),
-                  SizedBox(height: 15.0),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider()),
-                    Text(
-                      '或',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                    Expanded(child: Divider()),
-                  ]),
-                  SizedBox(height: 15.0),
-                  label("使用者名稱"),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  usernameField,
-                  SizedBox(height: 15.0),
-                  label("Email"),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  emailField,
-                  SizedBox(height: 15.0),
-                  label("密碼"),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  passwordField,
-                  SizedBox(height: 15.0),
-                  label("確認密碼"),
-                  confirmPassword,
-                  SizedBox(height: 20.0),
-                  longButtons("註冊", doRegister),
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),

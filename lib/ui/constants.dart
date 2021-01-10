@@ -33,5 +33,8 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
-
+const kTextDefaultStyle = TextStyle(color: Colors.black, fontSize: 15.0);
+const kTextGreyStyle = TextStyle(color: Colors.grey, fontSize: 15.0);
+const kLinkStyle = TextStyle(color: Colors.blue);
 const kNotificationDuration = Duration(seconds: 3);
+const kBackgroundColor = Colors.grey;

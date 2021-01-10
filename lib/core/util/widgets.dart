@@ -10,6 +10,7 @@ MaterialButton longButtons(String title, Function fun,
       width: double.infinity,
       child: Text(
         title,
+        style: TextStyle(fontSize: 18),
         textAlign: TextAlign.center,
       ),
     ),
