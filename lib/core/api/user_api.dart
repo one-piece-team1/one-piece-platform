@@ -22,14 +22,32 @@ class UserApi extends BaseApi {
   }
 
   Future<Response> getUser(Auth token) async {
-    Response response = await dioWithToken(BaseApi.userService)
-        .get(BaseApi.userBaseURL + '/info');
+    Response response =
+        await dioWithToken(BaseApi.userService).post(BaseApi.getUserInfo);
+    return response;
+  }
+
+  Future<Response> forgetPasswordStep1(Map<String, String> data) async {
+    Response response = await dioWithoutToken(BaseApi.userService)
+        .post(BaseApi.forgetPwdStep1, data: data);
+    return response;
+  }
+
+  Future<Response> forgetPasswordStep2(Map<String, String> data) async {
+    Response response = await dioWithoutToken(BaseApi.userService)
+        .post(BaseApi.forgetPwdStep2, data: data);
+    return response;
+  }
+
+  Future<Response> forgetPasswordStep3(Map<String, String> data) async {
+    Response response = await dioWithoutToken(BaseApi.userService)
+        .post(BaseApi.forgetPwdStep3, data: data);
     return response;
   }
 
   Future<Response> logout(String token) async {
-    Response response = await dioWithToken(BaseApi.userService)
-        .get(BaseApi.userBaseURL + '/logout');
+    Response response =
+        await dioWithToken(BaseApi.userService).get(BaseApi.logout);
     return response;
   }
 }

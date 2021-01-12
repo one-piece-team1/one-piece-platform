@@ -11,8 +11,8 @@ class User {
     this.email,
     this.username,
     this.id,
-    this.licence,
-    this.role,
+    this.licence = '',
+    this.role = '',
   });
 
   factory User.fromJson(Map<String, dynamic> responseData) {
