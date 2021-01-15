@@ -29,7 +29,9 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String _username, _email, _password;
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool showSpinner = false;
   final formKey = new GlobalKey<FormState>();
   FocusNode _emailFocusNode;
@@ -77,7 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       autofocus: false,
       keyboardType: TextInputType.text,
       validator: validateUserName,
-      onSaved: (value) => _username = value,
+      controller: _usernameController,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
       decoration: buildInputDecoration("輸入你的使用者名稱", null),
@@ -86,7 +88,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       autofocus: false,
       validator: validateEmail,
       keyboardType: TextInputType.emailAddress,
-      onSaved: (value) => _email = value,
+      controller: _emailController,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
       decoration: buildInputDecoration("輸入你的Email", null),
@@ -94,7 +96,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final passwordField = TextFormFieldInput(
         visible: _passwordVisible,
         validationMsg: validatePassword,
-        onSaved: (value) => _password = value,
+        controller: _passwordController,
         textInputActionStatus: TextInputAction.done,
         onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
         hintText: '請輸入你的密碼',
@@ -106,8 +108,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     final confirmPassword = TextFormFieldInput(
         visible: _confirmPasswordVisible,
-        validationMsg: (value) => validateConfirmPassword(value, _password),
-        onSaved: (value) => _password = value,
+//        onSaved: (value) => value,
+        validationMsg: (value) =>
+            validateConfirmPassword(value, _passwordController.text),
         textInputActionStatus: TextInputAction.done,
         onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
         hintText: '再次輸入你的密碼',
@@ -186,7 +189,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       });
       if (form.validate()) {
         form.save();
-        await auth.register(_username, _email, _password).then((response) {
+        await auth
+            .register(_usernameController.text, _emailController.text,
+                _passwordController.text)
+            .then((response) {
           if (response['status']) {
             Navigator.pushReplacementNamed(context, LoginScreen.id);
           } else {

@@ -23,7 +23,7 @@ class UserApi extends BaseApi {
 
   Future<Response> getUser(Auth token) async {
     Response response =
-        await dioWithToken(BaseApi.userService).post(BaseApi.getUserInfo);
+        await dioWithToken(BaseApi.userService).get(BaseApi.getUserInfo);
     return response;
   }
 

@@ -7,6 +7,7 @@ import 'package:one_piece_platform/ui/screens/authentication/forgot_password_scr
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
+import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
 import 'package:one_piece_platform/ui/screens/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -51,10 +52,10 @@ class OnePiecePlatform extends StatelessWidget {
                     else if (snapshot.data.id == null)
                       return LoginScreen();
                     else if (snapshot.data.id != null)
-                      return DashBoard();
+                      return TabPage();
                     else
                       UserPreferences().removeUser();
-                    return Welcome(user: snapshot.data);
+                    return Welcome(user: snapshot.data.user);
                 }
               }),
           initialRoute: RegistrationScreen.id,
@@ -63,6 +64,7 @@ class OnePiecePlatform extends StatelessWidget {
             RegistrationScreen.id: (context) => RegistrationScreen(),
             DashBoard.id: (context) => DashBoard(),
             ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+            TabPage.id: (context) => TabPage(),
           },
         ),
       ),

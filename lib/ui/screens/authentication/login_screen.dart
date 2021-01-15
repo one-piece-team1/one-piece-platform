@@ -17,6 +17,7 @@ import 'package:one_piece_platform/ui/components/common/notification_context.dar
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
 import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
 import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
+import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart' as k;
@@ -166,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
             User user = response['data'];
             Provider.of<UserProvider>(context, listen: false).setUser(user);
 
-            Navigator.pushReplacementNamed(context, DashBoard.id);
+            Navigator.pushReplacementNamed(context, TabPage.id);
           } else {
             setState(() {
               showSpinner = false;
