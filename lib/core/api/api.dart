@@ -1,13 +1,59 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:one_piece_platform/core/api/app_config.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BaseApi {
-  static const String localBaseURL = "http://localhost:8080/v1/api";
-  static const String liveBaseURL = "http://localhost:8080/v1/api";
-  static const String baseURL = localBaseURL;
   static const String userService = 'one-piece-user';
+  static String baseURL;
+  static String oAuthBaseURL;
+
+// set app environment as dev
+  void _initializeBaseApi() {
+    setEnvironment(Environment.dev);
+    baseURL = apiBaseUrl;
+    oAuthBaseURL = apiOAuthBaseUrl;
+  }
+
+  Future<void> launchOAuthURL(String oAuthType) async {
+    String _url;
+    switch (oAuthType) {
+      case 'google':
+        _initializeBaseApi();
+        _url = loginWithGoogle;
+        break;
+      case 'facebook':
+        _initializeBaseApi();
+
+        _url = loginWithFacebook;
+        break;
+      default:
+        _url = loginWithGoogle;
+    }
+    print('_url $_url');
+
+    await _launch(_url);
+  }
+
+  Future _launch(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+        headers: <String, String>{'service-name': userService},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   Dio dioWithoutToken(String serviceName) {
+    _initializeBaseApi();
+
+    print('baseURL $baseURL');
     final BaseOptions baseOptions = new BaseOptions(
         baseUrl: baseURL,
         connectTimeout: 5000,
@@ -15,11 +61,12 @@ class BaseApi {
         headers: {
           "service-name": serviceName,
         });
-
     return Dio(baseOptions);
   }
 
   Dio dioWithToken(String serviceName) {
+    _initializeBaseApi();
+
     String accessToken = UserPreferences().getToken;
 
     final BaseOptions baseOptions = new BaseOptions(
@@ -32,25 +79,21 @@ class BaseApi {
   }
 
 // USER
-  // References:
-  // Retrofit implementation in Flutter:  https://medium.com/globant/easy-way-to-implement-rest-api-calls-in-flutter-9859d1ab5396
-  // dio implementation: https://medium.com/@ashmikattel/dio-in-flutter-ad6ba26aee36
-  // TODO: http with Provider(prefer this one): https://medium.com/@afegbua/flutter-thursday-13-building-a-user-registration-and-login-process-with-provider-and-external-api-1bb87811fd1d
-  // TODO: dio with Provider: https://github.com/SquashConsulting/flutter_provider_boilerplate
 
-  static const String userBaseURL = baseURL + "/users";
+  static final String userBaseURL = baseURL + "/users";
 
-  static const String getUserInfo = userBaseURL + "/info";
-  static const String loginWithGoogle = userBaseURL + "";
-  static const String loginWithFacebook = userBaseURL + "";
-  static const String logout = userBaseURL + "/logout";
-  static const String forgetPwdStep1 = userBaseURL + "/forgets/generates";
-  static const String forgetPwdStep2 = userBaseURL + "/forgets/verifies";
-  static const String forgetPwdStep3 = userBaseURL + "/forgets/confirms";
-  static const String getUserPaging = userBaseURL + "/paging";
-  static const String signUp = userBaseURL + "/signup";
-  static const String signIn = userBaseURL + "/signin";
+  static final String getUserInfo = userBaseURL + "/info";
+
+  static final String loginWithGoogle = oAuthBaseURL + "/google";
+  static final String loginWithFacebook = oAuthBaseURL + "/facebook";
+  static final String logout = userBaseURL + "/logout";
+  static final String forgetPwdStep1 = userBaseURL + "/forgets/generates";
+  static final String forgetPwdStep2 = userBaseURL + "/forgets/verifies";
+  static final String forgetPwdStep3 = userBaseURL + "/forgets/confirms";
+  static final String getUserPaging = userBaseURL + "/paging";
+  static final String signUp = userBaseURL + "/signup";
+  static final String signIn = userBaseURL + "/signin";
 
   //TODO: find out the dynamic link, pass id down in function and convert to a String
-  static const String login = userBaseURL + "/{id}/password";
+  static final String login = userBaseURL + "/{id}/password";
 }

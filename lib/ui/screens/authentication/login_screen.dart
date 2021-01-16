@@ -1,18 +1,25 @@
+import 'dart:async';
 import 'dart:html';
 
-import 'package:flushbar/flushbar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:one_piece_platform/core/api/api.dart';
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
+import 'package:one_piece_platform/core/util/firebase_auth.dart';
 import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/buttons/social_sign_button.dart';
+import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/common/platform_exception_alert_dialog.dart';
+import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
+import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
-
+import '../../constants.dart' as k;
 import '../dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,14 +32,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
   bool showSpinner = false;
+
   final formKey = new GlobalKey<FormState>();
+  BaseApi baseApi = new BaseApi();
 
   FocusNode _emailFocusNode;
   FocusNode _passwordFocusNode;
 
+  bool _passwordVisible;
+
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
     _emailFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
   }
@@ -47,6 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
     // jump between controls with 'tab' in flutter for web
@@ -63,28 +77,38 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) => _email = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("Email", Icons.email),
+      decoration: buildInputDecoration("輸入你的Email", null),
     );
-    final passwordField = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      validator: validatePassword,
-      onSaved: (value) => _password = value,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
-      decoration: buildInputDecoration("Password", Icons.lock),
-    );
+    final passwordField = TextFormFieldInput(
+        visible: _passwordVisible,
+        validationMsg: validatePassword,
+        onSaved: (value) => _password = value,
+        textInputActionStatus: TextInputAction.done,
+        onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
+        hintText: '請輸入你的密碼',
+        iconButtonOnPressed: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        });
 
     void _showSignInError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
-        title: 'Sign in failed',
+        title: '登入失敗',
         exception: exception,
       ).show(context);
     }
 
     Future<void> _signInWithGoogle(BuildContext context) async {
       try {
-//        await manager.signInWithGoogle();
+        await signInWithGoogle(context).then((result) {
+          print('sign in google result $result');
+          // TODO: need to send the user's data to our backend
+
+          Navigator.pushNamed(context, DashBoard.id);
+        }).catchError((error) {
+          print('_signInWithGoogle Error: $error');
+        });
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showSignInError(context, e);
@@ -94,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Future<void> _signInWithFacebook(BuildContext context) async {
       try {
-//        await manager.signInWithFacebook();
+        await baseApi.launchOAuthURL('facebook');
       } on PlatformException catch (e) {
         if (e.code != 'ERROR_ABORTED_BY_USER') {
           _showSignInError(context, e);
@@ -147,96 +171,148 @@ class _LoginScreenState extends State<LoginScreen> {
             setState(() {
               showSpinner = false;
             });
-            Flushbar(
-              title: "Login Failed",
-              message: response["data"].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
+            showOverlayNotification((context) {
+              return NotificationContent(
+                title: "Login Failed",
+                subtitle: response["data"].toString(),
+              );
+            }, duration: kNotificationDuration);
           }
         });
       } else {
         setState(() {
           showSpinner = false;
         });
-        Flushbar(
-          title: "Invalid form",
-          message: "Please Complete the form properly",
-          duration: Duration(seconds: 3),
-        ).show(context);
+        showOverlayNotification((context) {
+          return NotificationContent(
+            title: "Invalid form",
+            subtitle: "Please Complete the form properly",
+          );
+        }, duration: kNotificationDuration);
       }
     };
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: Container(
-                      height: 200.0,
-                      child: Image.asset('images/logo.png'),
-                    ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: screenSize.height * 0.3,
+                color: Colors.grey[600],
+              ),
+              Form(
+                key: formKey,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenSize.height * 0.06,
                   ),
-                ),
-                SizedBox(
-                  height: 48.0,
-                ),
-                Text(
-                  'CONNECT WITH',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                Divider(),
-                Center(
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      googleOAuth,
-                      fbOAuth,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(
+                        height: screenSize.height * 0.25,
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: screenSize.height * 0.1,
+                          child: Image.asset('images/logo.png'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.height * 0.05,
+                      ),
+                      Text(
+                        '使用以下連結登入',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          height: 1.0,
+                          fontSize: screenSize.height * 0.02,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.height * 0.01,
+                      ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            googleOAuth,
+//                      fbOAuth,
 //                appleOAuth,
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: screenSize.height * 0.02),
+                      Row(children: <Widget>[
+                        Expanded(child: Divider()),
+                        Text(
+                          'OR',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: screenSize.height * 0.025,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        Expanded(child: Divider()),
+                      ]),
+                      SizedBox(height: screenSize.height * 0.02),
+                      label("Email"),
+                      SizedBox(
+                        height: screenSize.height * 0.01,
+                      ),
+                      emailField,
+                      SizedBox(height: screenSize.height * 0.02),
+                      label("Password"),
+                      SizedBox(
+                        height: screenSize.height * 0.01,
+                      ),
+                      passwordField,
+                      SizedBox(height: screenSize.height * 0.025),
+                      RichText(
+                        textAlign: TextAlign.right,
+                        text: TextSpan(
+                          style: k.kTextDefaultStyle,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Forgot password',
+                                style: k.kLinkStyle,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(
+                                        context, ForgotPasswordScreen.id);
+                                  }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: screenSize.height * 0.01),
+                      longButtons("Login", doLogin),
                     ],
                   ),
                 ),
-                SizedBox(height: 15.0),
-                Row(children: <Widget>[
-                  Expanded(child: Divider()),
-                  Text(
-                    'OR',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.grey[700],
-                    ),
+              ),
+              new Positioned(
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: AppBar(
+                  title: Text(''), // You can add title here
+                  leading: new IconButton(
+                    icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                  Expanded(child: Divider()),
-                ]),
-                SizedBox(height: 15.0),
-                label("Email"),
-                SizedBox(
-                  height: 8.0,
+                  backgroundColor:
+                      Colors.grey[800], //You can make this transparent
+                  elevation: 0.0, //No shadow
                 ),
-                emailField,
-                SizedBox(height: 15.0),
-                label("Password"),
-                SizedBox(
-                  height: 8.0,
-                ),
-                passwordField,
-                SizedBox(height: 20.0),
-                longButtons("Login", doLogin),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

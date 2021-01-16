@@ -1,5 +1,6 @@
 import 'package:one_piece_platform/core/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class UserPreferences {
   static SharedPreferences _sharedPrefs;
@@ -13,6 +14,10 @@ class UserPreferences {
   set saveToken(String accessToken) {
     _sharedPrefs.setString('accessToken', "Bearer " + accessToken);
     print("token preference");
+  }
+
+  set isAuth(bool isAuth) {
+    _sharedPrefs.setBool("auth", isAuth);
   }
 
   set saveUser(User user) {
@@ -37,6 +42,7 @@ class UserPreferences {
   }
 
   void removeUser() {
+    _sharedPrefs.remove("auth");
     _sharedPrefs.remove("name");
     _sharedPrefs.remove("email");
     _sharedPrefs.remove("licence");

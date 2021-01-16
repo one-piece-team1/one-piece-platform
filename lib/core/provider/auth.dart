@@ -80,7 +80,7 @@ class AuthProvider with ChangeNotifier {
 
     return await UserApi()
         .registerUser(registrationData)
-        .then(onValue)
+        .then(onRegisterValue)
         .catchError(onError);
   }
 
@@ -104,7 +104,27 @@ class AuthProvider with ChangeNotifier {
     };
   }
 
-  static Future<FutureOr> onValue(Response response) async {
+  Future<Map<String, dynamic>> forgetPasswordStep1(String email) async {
+    final Map<String, String> forgetPassStep1Email = {
+      'email': email,
+    };
+    Response forgetPassStep1Res =
+        await UserApi().forgetPasswordStep1(forgetPassStep1Email);
+    var forgetPassStep1Data = forgetPassStep1Res.data;
+    if (forgetPassStep1Res.statusCode == 201) {
+      return {
+        'status': true,
+        'message': forgetPassStep1Data["message"],
+      };
+    }
+
+    return {
+      'status': false,
+      'message': 'Fail to call forgetPasswordStep1',
+    };
+  }
+
+  static Future<FutureOr> onRegisterValue(Response response) async {
     var result;
     var responseData = response.data;
 
@@ -119,6 +139,26 @@ class AuthProvider with ChangeNotifier {
         'status': false,
         'message': 'Registration failed',
         'data': responseData["error"]
+      };
+    }
+
+    return result;
+  }
+
+  static Future<FutureOr> onValue(Response response) async {
+    var result;
+    var responseData = response.data;
+
+    if (responseData["statusCode"] == 201) {
+      result = {
+        'status': true,
+        'message': responseData["message"],
+        'data': responseData["data"] ? responseData["data"] : null
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': responseData["error"],
       };
     }
 
