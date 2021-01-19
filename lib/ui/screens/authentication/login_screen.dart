@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       onSaved: (value) => _email = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("輸入你的Email", null),
+      decoration: buildInputDecoration("Enter your Email", null),
     );
     final passwordField = TextFormFieldInput(
         visible: _passwordVisible,
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (value) => _password = value,
         textInputActionStatus: TextInputAction.done,
         onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
-        hintText: '請輸入你的密碼',
+        hintText: 'Enter your password',
         iconButtonOnPressed: () {
           setState(() {
             _passwordVisible = !_passwordVisible;
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     void _showSignInError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
-        title: '登入失敗',
+        title: 'Login failed',
         exception: exception,
       ).show(context);
     }
@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Future<void> _signInWithGoogle(BuildContext context) async {
       try {
         await signInWithGoogle(context).then((result) {
-          print('sign in google result $result');
+          print('Sign in google result $result');
           // TODO: need to send the user's data to our backend
 
           Navigator.pushNamed(context, DashBoard.id);
@@ -202,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Stack(
             children: <Widget>[
               Container(
-                height: screenSize.height * 0.3,
+                height: screenSize.height * 0.2,
                 color: Colors.grey[600],
               ),
               Form(
@@ -216,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       SizedBox(
-                        height: screenSize.height * 0.25,
+                        height: screenSize.height * 0.15,
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
@@ -229,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: screenSize.height * 0.05,
                       ),
                       Text(
-                        '使用以下連結登入',
+                        'Login with',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           height: 1.0,

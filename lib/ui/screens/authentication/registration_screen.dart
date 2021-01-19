@@ -82,7 +82,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       controller: _usernameController,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
-      decoration: buildInputDecoration("輸入你的使用者名稱", null),
+      decoration: buildInputDecoration("Enter your user name", null),
     );
     final emailField = TextFormField(
       autofocus: false,
@@ -91,7 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       controller: _emailController,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration: buildInputDecoration("輸入你的Email", null),
+      decoration: buildInputDecoration("Enter your Email", null),
     );
     final passwordField = TextFormFieldInput(
         visible: _passwordVisible,
@@ -99,7 +99,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         controller: _passwordController,
         textInputActionStatus: TextInputAction.done,
         onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
-        hintText: '請輸入你的密碼',
+        hintText: 'Enter your password',
         iconButtonOnPressed: () {
           setState(() {
             _passwordVisible = !_passwordVisible;
@@ -113,7 +113,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             validateConfirmPassword(value, _passwordController.text),
         textInputActionStatus: TextInputAction.done,
         onFieldSubmitted: (_) => _confirmPasswordFocusNode.unfocus(),
-        hintText: '再次輸入你的密碼',
+        hintText: 'Enter your password again',
         iconButtonOnPressed: () {
           setState(() {
             _confirmPasswordVisible = !_confirmPasswordVisible;
@@ -122,7 +122,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     void _showRegisterError(BuildContext context, PlatformException exception) {
       PlatformExceptionAlertDialog(
-        title: '註冊失敗',
+        title: 'Register failed',
         exception: exception,
       ).show(context);
     }
@@ -236,7 +236,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: Stack(
               children: <Widget>[
                 Container(
-                  height: screenSize.height * 0.3,
+                  height: screenSize.height * 0.2,
                   color: Colors.grey[600],
                 ),
                 Form(
@@ -250,7 +250,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         SizedBox(
-                          height: screenSize.height * 0.25,
+                          height: screenSize.height * 0.15,
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
@@ -263,7 +263,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: screenSize.height * 0.05,
                         ),
                         Text(
-                          '使用以下連結註冊',
+                          'Register with',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             height: 1.0,
@@ -288,7 +288,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         Row(children: <Widget>[
                           Expanded(child: Divider()),
                           Text(
-                            '或',
+                            'OR',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: screenSize.height * 0.025,
@@ -298,7 +298,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Expanded(child: Divider()),
                         ]),
                         SizedBox(height: screenSize.height * 0.02),
-                        label("使用者名稱"),
+                        label("User Name"),
                         SizedBox(
                           height: screenSize.height * 0.01,
                         ),
@@ -310,11 +310,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         emailField,
                         SizedBox(height: screenSize.height * 0.02),
-                        label("密碼"),
+                        label("Password"),
                         SizedBox(height: screenSize.height * 0.01),
                         passwordField,
                         SizedBox(height: screenSize.height * 0.02),
-                        label("確認密碼"),
+                        label("Confirm your password"),
                         SizedBox(height: screenSize.height * 0.01),
                         confirmPassword,
                         SizedBox(height: screenSize.height * 0.025),
@@ -355,9 +355,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             text: TextSpan(
                               style: k.kTextDefaultStyle,
                               children: <TextSpan>[
-                                TextSpan(text: '已有帳號?  '),
+                                TextSpan(text: 'Already have an account?  '),
                                 TextSpan(
-                                    text: '登入',
+                                    text: 'Login',
                                     style: k.kLinkStyle,
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
