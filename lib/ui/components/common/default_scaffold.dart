@@ -4,19 +4,60 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 class DefaultScaffold extends StatelessWidget {
   DefaultScaffold({
     this.showSpinner: false,
+
 //    @required this.contents,
   });
 
   final bool showSpinner;
+
 //  final List<Widget> contents;
 //TODO: how to pass multiple widgets just like react slot
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Colors.indigo[900],
+      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
+      bottomNavigationBar: new Container(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: FlatButton.icon(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.filter_alt,
+                  color: Color(0xFF414141),
+                ),
+                label: Text(
+                  "Filter",
+                  style: TextStyle(
+                    color: Color(0xFF414141),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: FlatButton.icon(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.sort,
+                  color: Color(0xFF414141),
+                ),
+                label: Text(
+                  "Sort",
+                  style: TextStyle(
+                    color: Color(0xFF414141),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(''), // You can add title here
         leading: new IconButton(
