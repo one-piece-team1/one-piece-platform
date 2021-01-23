@@ -11,7 +11,6 @@ class DefaultScaffold extends StatelessWidget {
   final bool showSpinner;
 
 //  final List<Widget> contents;
-//TODO: how to pass multiple widgets just like react slot
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -29,14 +28,21 @@ class DefaultScaffold extends StatelessWidget {
                 onPressed: () {},
                 icon: Icon(
                   Icons.filter_alt,
-                  color: Color(0xFF414141),
+                  color: const Color(0xFF414141),
                 ),
                 label: Text(
                   "Filter",
                   style: TextStyle(
-                    color: Color(0xFF414141),
+                    color: const Color(0xFF414141),
                   ),
                 ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              child: Container(
+                color: Colors.grey[600],
+                width: 2,
               ),
             ),
             Expanded(
@@ -45,12 +51,12 @@ class DefaultScaffold extends StatelessWidget {
                 onPressed: () {},
                 icon: Icon(
                   Icons.sort,
-                  color: Color(0xFF414141),
+                  color: const Color(0xFF414141),
                 ),
                 label: Text(
                   "Sort",
                   style: TextStyle(
-                    color: Color(0xFF414141),
+                    color: const Color(0xFF414141),
                   ),
                 ),
               ),
@@ -87,12 +93,7 @@ class DefaultScaffold extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  BodyWidget(Colors.blue),
-                  BodyWidget(Colors.red),
-                  BodyWidget(Colors.green),
-                  BodyWidget(Colors.orange),
-                  BodyWidget(Colors.blue),
-                  BodyWidget(Colors.red),
+                  BodyWidget(Colors.grey),
                 ],
               ),
             ),
