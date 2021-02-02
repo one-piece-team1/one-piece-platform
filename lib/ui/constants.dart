@@ -17,7 +17,7 @@ const kMessageContainerDecoration = BoxDecoration(
     top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
   ),
 );
-
+const kBoxHeight = 5.0;
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

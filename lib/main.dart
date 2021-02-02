@@ -1,16 +1,17 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
+import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
 import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
 import 'package:one_piece_platform/ui/screens/welcome.dart';
-import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 
 import 'core/models/user_model.dart';
 import 'core/util/shared_preference.dart';
@@ -65,6 +66,7 @@ class OnePiecePlatform extends StatelessWidget {
             DashBoard.id: (context) => DashBoard(),
             ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
             TabPage.id: (context) => TabPage(),
+            Ticket.id: (context) => Ticket(),
           },
         ),
       ),

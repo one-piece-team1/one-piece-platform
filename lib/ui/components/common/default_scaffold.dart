@@ -79,7 +79,7 @@ class DefaultScaffold extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             SliverPersistentHeader(
-              pinned: false,
+              floating: true,
               delegate: MyDynamicHeader(),
             ),
             SliverList(
@@ -172,7 +172,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
           boxShadow: [BoxShadow(blurRadius: 4.0, color: Colors.black45)],
           gradient: LinearGradient(colors: [Colors.indigo[900], Colors.indigo]),
         ),
-        height: constraints.maxHeight,
+        height: 150,
         child: SafeArea(
           child: Stack(
             alignment: Alignment.topCenter,
