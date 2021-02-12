@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/styles/size_config.dart';
 import 'package:one_piece_platform/ui/text/expandable_text.dart';
 
@@ -89,31 +90,26 @@ class DefaultScaffold extends StatelessWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  HeaderWidget("Header 1"),
-                  HeaderWidget("Header 2"),
-                ],
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  BodyWidget(Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Ticket(),
+                  ),
                 ],
               ),
             ),
             SliverGrid(
               delegate: SliverChildListDelegate([
-                BodyWidget(Colors.blue),
-                BodyWidget(Colors.red),
-                BodyWidget(Colors.green),
-                BodyWidget(Colors.orange),
-                BodyWidget(Colors.blue),
-                BodyWidget(Colors.red),
-                BodyWidget(Colors.red),
-                BodyWidget(Colors.green),
-                BodyWidget(Colors.orange),
-                BodyWidget(Colors.blue),
-                BodyWidget(Colors.red),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
+                Thumbnail('https://picsum.photos/100'),
               ]),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
@@ -141,17 +137,28 @@ class HeaderWidget extends StatelessWidget {
   }
 }
 
-class BodyWidget extends StatelessWidget {
-  final Color color;
+class Thumbnail extends StatelessWidget {
+  final String imageURL;
 
-  BodyWidget(this.color);
+  Thumbnail(this.imageURL);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100.0,
-      color: color,
-      alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: DecoratedBox(
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              imageURL,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
