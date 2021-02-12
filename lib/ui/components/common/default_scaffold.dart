@@ -450,10 +450,12 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate _) => true;
 
   @override
-//  double get maxExtent => 450.0;
-  double get maxExtent => SizeConfig.safeBlockVertical * 70.0;
+  double get maxExtent => SizeConfig.safeBlockVertical != null
+      ? SizeConfig.safeBlockVertical * 70.0
+      : 500.0;
 
   @override
-//  double get minExtent => 450.0;
-  double get minExtent => SizeConfig.safeBlockVertical * 70.0;
+  double get minExtent => SizeConfig.safeBlockVertical != null
+      ? SizeConfig.safeBlockVertical * 70.0
+      : 500.0;
 }
