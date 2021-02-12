@@ -177,14 +177,11 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
       SizeConfig().init(context);
 
       return Container(
-        constraints: BoxConstraints(
-          maxHeight: double.infinity,
-        ),
         decoration: BoxDecoration(
           boxShadow: [BoxShadow(blurRadius: 4.0, color: Colors.black45)],
           gradient: LinearGradient(colors: [Colors.indigo[900], Colors.indigo]),
         ),
-        height: SizeConfig.safeBlockVertical * 400,
+        height: SizeConfig.safeBlockVertical * 400.0,
         child: SafeArea(
           child: Stack(
             alignment: Alignment.topCenter,
@@ -196,8 +193,7 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                 child: Container(
                   //replace this Container with your Card description
                   color: Colors.white,
-//                  height: double.infinity,
-                  height: SizeConfig.safeBlockVertical * 400,
+                  height: SizeConfig.safeBlockVertical * 400.0,
 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -208,17 +204,16 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(
-                            height: queryData.size.height / 15,
+                            height: SizeConfig.safeBlockVertical * 5.0,
                           ),
-                          Expanded(
-                              child: Text(
+                          Text(
                             'Evena',
                             style: TextStyle(
                               fontSize: nameFontSize,
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
-                          )),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -256,7 +251,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 15,
+                                      height:
+                                          SizeConfig.safeBlockVertical * 2.0,
                                       child: Container(
                                         color: Colors.grey[900],
                                         width: 1,
@@ -334,7 +330,9 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: kBoxHeight,
+                                            height:
+                                                SizeConfig.safeBlockVertical *
+                                                    2.0,
                                           ),
                                           Align(
                                             alignment: Alignment.center,
@@ -351,7 +349,8 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 50,
+                                      height:
+                                          SizeConfig.safeBlockVertical * 10.0,
                                       child: Container(
                                         color: Colors.grey[900],
                                         width: 1,
@@ -381,7 +380,9 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: kBoxHeight,
+                                            height:
+                                                SizeConfig.safeBlockVertical *
+                                                    2.0,
                                           ),
                                           Align(
                                             alignment: Alignment.center,
@@ -449,8 +450,10 @@ class MyDynamicHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate _) => true;
 
   @override
-  double get maxExtent => SizeConfig.safeBlockVertical * 65;
+//  double get maxExtent => 450.0;
+  double get maxExtent => SizeConfig.safeBlockVertical * 70.0;
 
   @override
-  double get minExtent => SizeConfig.safeBlockVertical * 65;
+//  double get minExtent => 450.0;
+  double get minExtent => SizeConfig.safeBlockVertical * 70.0;
 }

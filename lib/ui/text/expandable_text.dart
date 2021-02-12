@@ -4,30 +4,52 @@ class ExpandableText extends StatefulWidget {
   ExpandableText(this.text);
 
   final String text;
-  bool isExpanded = false;
 
   @override
   _ExpandableTextState createState() => new _ExpandableTextState();
 }
 
-class _ExpandableTextState extends State<ExpandableText> {
+class _ExpandableTextState extends State<ExpandableText>
+    with AutomaticKeepAliveClientMixin {
+  bool isExpanded = false;
+
+  @override
+  bool get wantKeepAlive => true;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _setIsExpanded() {
+    setState(() {
+      isExpanded = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Column(children: <Widget>[
-      new ConstrainedBox(
-          constraints: widget.isExpanded
+    super.build(context);
+
+    return SingleChildScrollView(
+      child: new Column(children: <Widget>[
+        new ConstrainedBox(
+          constraints: isExpanded
               ? new BoxConstraints()
-              : new BoxConstraints(maxHeight: 50.0),
+              : new BoxConstraints(maxHeight: 30.0),
           child: new Text(
             widget.text,
             softWrap: true,
             overflow: TextOverflow.fade,
-          )),
-      widget.isExpanded
-          ? new Container()
-          : new FlatButton(
-              child: const Text('...'),
-              onPressed: () => setState(() => widget.isExpanded = true))
-    ]);
+          ),
+        ),
+        isExpanded
+            ? new Container()
+            : new FlatButton(
+                child: const Text('...'),
+                onPressed: () {
+                  _setIsExpanded();
+                })
+      ]),
+    );
   }
 }
