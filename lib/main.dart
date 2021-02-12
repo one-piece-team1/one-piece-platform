@@ -9,6 +9,7 @@ import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
 import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
+import 'package:one_piece_platform/ui/screens/user/user_info.dart';
 import 'package:one_piece_platform/ui/screens/welcome.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,8 @@ class OnePiecePlatform extends StatelessWidget {
             DashBoard.id: (context) => DashBoard(),
             ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
             TabPage.id: (context) => TabPage(),
-            Ticket.id: (context) => Ticket(),
+            UserInfo.id: (context) => UserInfo(), // for
+            Ticket.id: (context) => Ticket(), // for
           },
         ),
       ),

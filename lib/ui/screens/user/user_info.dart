@@ -3,6 +3,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:one_piece_platform/ui/components/common/default_scaffold.dart';
 
 class UserInfo extends StatefulWidget {
+  static const String id = 'userInfo';
+
   static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => UserInfo(),
       );
