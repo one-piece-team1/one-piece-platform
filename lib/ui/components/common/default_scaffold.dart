@@ -4,7 +4,7 @@ import 'package:one_piece_platform/core/models/entry_model.dart';
 import 'package:one_piece_platform/ui/components/buttons/flat_icon_button.dart';
 import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/components/image/thumbnail.dart';
-import 'package:one_piece_platform/ui/components/expansion/entry_item.dart';
+import 'package:one_piece_platform/ui/components/listItem/entry_item.dart';
 import 'package:one_piece_platform/ui/screens/user/user_dynamic_header.dart';
 
 import '../../constants.dart';
@@ -45,6 +45,8 @@ class DefaultScaffold extends StatelessWidget {
       ],
     ),
   ];
+// The entire multilevel list displayed by this app.
+  final List sortData = <String>["Most Recent", "Oldest First"];
 
 //  final List<Widget> contents;
   @override
@@ -124,7 +126,59 @@ class DefaultScaffold extends StatelessWidget {
             Expanded(
               flex: 1,
               child: FlatIconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Row(
+                            // A Row widget
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Free space will be equally divided and will be placed between the children.
+                            children: <Widget>[
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                // A Flexible widget that will make its child flexible
+                                child: Text(
+                                  "Sort",
+                                  overflow: TextOverflow
+                                      .ellipsis, // handles overflowing of text
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.clear), // some random icon
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ), //
+                            ],
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(sortData[index]),
+                                  onTap: () {
+                                    // TODO: sort the data
+                                    print(sortData[index]);
+                                  },
+                                );
+                              },
+                              itemCount: sortData.length,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 icon: Icons.swap_vert,
                 labelText: 'Sort',
                 iconColor: kIconPrimaryColor,
