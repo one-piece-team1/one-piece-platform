@@ -3,6 +3,8 @@ import 'package:one_piece_platform/ui/components/buttons/rounded_button.dart';
 import 'package:one_piece_platform/ui/styles/size_config.dart';
 import 'package:one_piece_platform/ui/text/expandable_text.dart';
 
+import '../../constants.dart';
+
 class UserDynamicHeader extends SliverPersistentHeaderDelegate {
   int index = 0;
   final double circleRadius = 100.0;
@@ -10,11 +12,41 @@ class UserDynamicHeader extends SliverPersistentHeaderDelegate {
   final double jobTitleWidth = 70.0;
   final double jobAndAgeFontSize = 17.0;
   final double nameFontSize = 20.0;
-  final bool isUser = false;
+  final bool isMe = true;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    // get the Edit profile button or Follow button with [isMe]
+    Widget getProfileBtn() {
+      return isMe
+          ? RoundedButton(
+              onPressed: () {
+                print('Edit profile got clicked');
+              },
+              title: 'Edit Profile',
+              textColor: kPrimaryBlue,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                    color: kPrimaryBlue, width: 1, style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            )
+          : RoundedButton(
+              title: 'Follow', // TODO: following status
+              color: kPrimaryBlue,
+              textColor: kPrimaryWhite,
+              onPressed: () {
+                print('Follow got clicked');
+              },
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: kPrimaryBlue),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            );
+      ;
+    }
+
     return LayoutBuilder(builder: (context, constraints) {
       final Color color = Colors.primaries[index];
       final double percentage =
@@ -254,21 +286,16 @@ class UserDynamicHeader extends SliverPersistentHeaderDelegate {
                           Container(
                             width: queryData.size.width,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.center,
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(
+//                                alignment: Alignment.center,
                                 child: ExpandableText(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque interdum rutrum sodales. Nullam mattis fermentum libero, non volutpat.",
                                 ),
                               ),
                             ),
                           ),
-                          RoundedButton(
-                            title: isUser ? 'Follow' : 'Edit Profile',
-                            color:
-                                isUser ? const Color(0xFF2554CE) : Colors.white,
-                            onPressed: () {},
-                          )
+                          getProfileBtn()
                         ],
                       ),
                     ],
@@ -305,11 +332,11 @@ class UserDynamicHeader extends SliverPersistentHeaderDelegate {
 
   @override
   double get maxExtent => SizeConfig.safeBlockVertical != null
-      ? SizeConfig.safeBlockVertical * 70.0
-      : 500.0;
+      ? SizeConfig.safeBlockVertical * 75.0
+      : 550.0;
 
   @override
   double get minExtent => SizeConfig.safeBlockVertical != null
-      ? SizeConfig.safeBlockVertical * 70.0
-      : 500.0;
+      ? SizeConfig.safeBlockVertical * 75.0
+      : 550.0;
 }

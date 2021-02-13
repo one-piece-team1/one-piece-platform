@@ -38,3 +38,5 @@ const kTextGreyStyle = TextStyle(color: Colors.grey, fontSize: 15.0);
 const kLinkStyle = TextStyle(color: Colors.blue);
 const kNotificationDuration = Duration(seconds: 3);
 const kBackgroundColor = Colors.grey;
+const kPrimaryBlue = const Color(0xFF2554CE);
+const kPrimaryWhite = Colors.white;

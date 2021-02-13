@@ -40,6 +40,7 @@ class _ExpandableTextState extends State<ExpandableText>
             widget.text,
             softWrap: true,
             overflow: TextOverflow.fade,
+            textAlign: TextAlign.justify,
           ),
         ),
         isExpanded
