@@ -40,3 +40,4 @@ const kNotificationDuration = Duration(seconds: 3);
 const kBackgroundColor = Colors.grey;
 const kPrimaryBlue = const Color(0xFF2554CE);
 const kPrimaryWhite = Colors.white;
+const kIconPrimaryColor = const Color(0xFF414141);

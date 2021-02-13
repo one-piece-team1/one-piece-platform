@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:one_piece_platform/ui/components/buttons/flat_icon_button.dart';
 import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/components/image/thumbnail.dart';
 import 'package:one_piece_platform/ui/screens/user/user_dynamic_header.dart';
@@ -29,18 +30,12 @@ class DefaultScaffold extends StatelessWidget {
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: FlatButton.icon(
+              child: FlatIconButton(
                 onPressed: () {},
-                icon: Icon(
-                  Icons.filter_alt,
-                  color: const Color(0xFF414141),
-                ),
-                label: Text(
-                  "Filter",
-                  style: TextStyle(
-                    color: const Color(0xFF414141),
-                  ),
-                ),
+                icon: Icons.filter_alt,
+                labelText: 'Filter',
+                iconColor: kIconPrimaryColor,
+                textColor: kIconPrimaryColor,
               ),
             ),
             SizedBox(
@@ -52,18 +47,12 @@ class DefaultScaffold extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: FlatButton.icon(
+              child: FlatIconButton(
                 onPressed: () {},
-                icon: Icon(
-                  Icons.sort,
-                  color: const Color(0xFF414141),
-                ),
-                label: Text(
-                  "Sort",
-                  style: TextStyle(
-                    color: const Color(0xFF414141),
-                  ),
-                ),
+                icon: Icons.sort,
+                labelText: 'Sort',
+                iconColor: kIconPrimaryColor,
+                textColor: kIconPrimaryColor,
               ),
             ),
           ],
