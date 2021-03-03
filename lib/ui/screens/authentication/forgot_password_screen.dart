@@ -7,6 +7,8 @@ import 'package:one_piece_platform/core/util/validators.dart';
 import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
+import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
+import 'package:one_piece_platform/ui/screens/authentication/reset_password_screen.dart';
 import 'package:one_piece_platform/ui/styles/CustomTextStyle.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final formKey = new GlobalKey<FormState>();
   String _email, _verifyCode, _password;
   bool showSpinner = false;
+  bool showVerifyCodeFiled = false;
   BaseApi baseApi = new BaseApi();
   FocusNode _emailFocusNode;
   FocusNode _verifyCodeFocusNode;
@@ -69,23 +72,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       onSaved: (value) => _verifyCode = value,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
-      decoration:
-          buildInputDecoration("Input your verify code from Email", null),
+      decoration: buildInputDecoration("", null),
     );
-    final passwordField = TextFormFieldInput(
-        visible: _passwordVisible,
-        validationMsg: validateNewPassword,
-        onSaved: (value) => _password = value,
-        textInputActionStatus: TextInputAction.done,
-        onFieldSubmitted: (_) => _passwordFocusNode.unfocus(),
-        hintText: 'Input your new password',
-        iconButtonOnPressed: () {
-          setState(() {
-            _passwordVisible = !_passwordVisible;
-          });
-        });
 
-    var doForgotPassword = () async {
+    var sendVerifyEmail = () async {
       final form = formKey.currentState;
       setState(() {
         showSpinner = true;
@@ -93,20 +83,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (form.validate()) {
         form.save();
         //TODO: forgot password step1
-
-        await auth.forgetPasswordStep1(_email).then((response) {
-          print(response["message"].toString());
+//        await auth.forgetPasswordStep1(_email).then((response) {
+//          print(response.toString());
+////          print(response["message"].toString());
+//        });
+        // Show verification input
+        setState(() {
+          showVerifyCodeFiled = true;
+          showSpinner = false;
         });
+      } else {
+        setState(() {
+          showSpinner = false;
+        });
+        showOverlayNotification((context) {
+          return NotificationContent(
+            title: "Invalid form",
+            subtitle: "Please Complete the form properly",
+          );
+        }, duration: kNotificationDuration);
+      }
+    };
+    var sendVerifyCode = () async {
+      final form = formKey.currentState;
+      setState(() {
+        showSpinner = true;
+      });
+
+      if (form.validate()) {
+        print('validated!!');
+        form.save();
 
         //TODO: forgot password step2
         final Map<String, String> forgetPassStep2Data = {
           'key': _verifyCode,
         };
-        //TODO: forgot password step3
-        final Map<String, String> forgetPassStep3Data = {
-          'key': _verifyCode,
-          'password': _password,
-        };
+//        TODO: call send verify code api
+
+        setState(() {
+          showSpinner = false;
+        });
+//        TODO: push and send over verifiyCode to reset password screen
+        Navigator.pushNamed(context, ResetPasswordScreen.id,
+            arguments: {'verifyCode': _verifyCode});
       } else {
         setState(() {
           showSpinner = false;
@@ -152,26 +171,35 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: screenSize.height * 0.01,
                   ),
                   emailField,
+
                   SizedBox(
-                    height: screenSize.height * 0.01,
+                    height: screenSize.height * 0.2,
                   ),
-//                  label("Verify Code"),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
-//                  verifyCodeField,
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
+                  Visibility(
+                      visible: showVerifyCodeFiled,
+                      child: Column(
+                        children: [
+                          label("Verify Code"),
+                          SizedBox(
+                            height: screenSize.height * 0.01,
+                          ),
+                          Container(width: 100.0, child: verifyCodeField),
+                        ],
+                      )),
+//                  SizedBox(
+//                    height: screenSize.height * 0.01,
+//                  ),
 //                  label("New Password"),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
+//                  SizedBox(
+//                    height: screenSize.height * 0.01,
+//                  ),
 //                  passwordField,
                   SizedBox(
-                    height: screenSize.height * 0.4,
+                    height: screenSize.height * 0.15,
                   ),
-                  longButtons("Confirm ", doForgotPassword),
+                  showVerifyCodeFiled
+                      ? longButtons("Confirm", sendVerifyCode)
+                      : longButtons("Send Verification Code", sendVerifyEmail),
                 ],
               ),
             ),
@@ -184,7 +212,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               title: Text('Forgot Password'), // You can add title here
               leading: new IconButton(
                 icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, LoginScreen.id),
               ),
               backgroundColor: Colors.grey[800],
               elevation: 0.0, //No shadow

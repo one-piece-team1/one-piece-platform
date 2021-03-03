@@ -7,6 +7,7 @@ import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
+import 'package:one_piece_platform/ui/screens/authentication/reset_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
 import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
 import 'package:one_piece_platform/ui/screens/user/user_info.dart';
@@ -66,6 +67,7 @@ class OnePiecePlatform extends StatelessWidget {
             RegistrationScreen.id: (context) => RegistrationScreen(),
             DashBoard.id: (context) => DashBoard(),
             ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+            ResetPasswordScreen.id: (context) => ResetPasswordScreen(),
             TabPage.id: (context) => TabPage(),
             UserInfo.id: (context) => UserInfo(), // for
             Ticket.id: (context) => Ticket(), // for
