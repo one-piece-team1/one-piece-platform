@@ -17,7 +17,7 @@ const kMessageContainerDecoration = BoxDecoration(
     top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
   ),
 );
-
+const kBoxHeight = 5.0;
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -33,8 +33,11 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
-const kTextDefaultStyle = TextStyle(color: Colors.black, fontSize: 15.0);
+const kTextDefaultStyle = TextStyle(color: Colors.black, fontSize: 10.0);
 const kTextGreyStyle = TextStyle(color: Colors.grey, fontSize: 15.0);
 const kLinkStyle = TextStyle(color: Colors.blue);
 const kNotificationDuration = Duration(seconds: 3);
 const kBackgroundColor = Colors.grey;
+const kPrimaryBlue = const Color(0xFF2554CE);
+const kPrimaryWhite = Colors.white;
+const kIconPrimaryColor = const Color(0xFF414141);

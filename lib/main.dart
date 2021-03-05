@@ -1,15 +1,20 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
+import 'package:one_piece_platform/ui/components/common/ticket.dart';
 import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
 import 'package:one_piece_platform/ui/screens/authentication/registration_screen.dart';
+import 'package:one_piece_platform/ui/screens/authentication/reset_password_screen.dart';
 import 'package:one_piece_platform/ui/screens/dashboard.dart';
+import 'package:one_piece_platform/ui/screens/tabs/tab_screen.dart';
+import 'package:one_piece_platform/ui/screens/user/user_info.dart';
 import 'package:one_piece_platform/ui/screens/welcome.dart';
-import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'core/models/user_model.dart';
 import 'core/util/shared_preference.dart';
@@ -18,6 +23,8 @@ Future<void> main() async {
   // init shared preferences for getter and setter
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences().init();
+// Remove hash from url
+  setPathUrlStrategy();
   runApp(OnePiecePlatform());
 }
 
@@ -51,10 +58,10 @@ class OnePiecePlatform extends StatelessWidget {
                     else if (snapshot.data.id == null)
                       return LoginScreen();
                     else if (snapshot.data.id != null)
-                      return DashBoard();
+                      return TabPage();
                     else
                       UserPreferences().removeUser();
-                    return Welcome(user: snapshot.data);
+                    return Welcome(user: snapshot.data.user);
                 }
               }),
           initialRoute: RegistrationScreen.id,
@@ -63,6 +70,10 @@ class OnePiecePlatform extends StatelessWidget {
             RegistrationScreen.id: (context) => RegistrationScreen(),
             DashBoard.id: (context) => DashBoard(),
             ForgotPasswordScreen.id: (context) => ForgotPasswordScreen(),
+            ResetPasswordScreen.id: (context) => ResetPasswordScreen(),
+            TabPage.id: (context) => TabPage(),
+            UserInfo.id: (context) => UserInfo(), // for
+            Ticket.id: (context) => Ticket(), // for
           },
         ),
       ),

@@ -1,11 +1,11 @@
 {
-    "name": "one_piece_platform",
-    "short_name": "OP Platform",
+    "name": "Ahoy!!",
+    "short_name": "Ahoy!!",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A trip diary app for sailors.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

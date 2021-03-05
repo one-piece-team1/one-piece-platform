@@ -9,6 +9,7 @@ class TextFormFieldInput extends StatelessWidget {
     this.onFieldSubmitted,
     this.hintText,
     this.iconButtonOnPressed,
+    this.controller,
   });
 
   final bool visible;
@@ -18,6 +19,7 @@ class TextFormFieldInput extends StatelessWidget {
   final void Function(String) onFieldSubmitted;
   final String hintText;
   final VoidCallback iconButtonOnPressed;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class TextFormFieldInput extends StatelessWidget {
       autofocus: false,
       obscureText: visible != null ? !visible : false,
       validator: validationMsg,
+      controller: controller,
       onSaved: onSaved,
       textInputAction: textInputActionStatus,
       onFieldSubmitted: onFieldSubmitted,

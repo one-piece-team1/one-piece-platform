@@ -102,7 +102,7 @@ jobs:
           command: echo 'export PATH="$PATH:`pwd`/flutter/bin"'  >> $BASH_ENV
       - run:
           name: Download flutter SDK
-          command: if ! test -f "flutter_sdk.zip"; then curl -o flutter_sdk.zip https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_v1.9.1+hotfix.4-stable.zip; fi
+          command: if ! test -f "flutter_sdk.zip"; then curl -o flutter_sdk.zip https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_2.0.1-stable.zip; fi
       - run:
           name: Unzip flutter SDK
           command: unzip flutter_sdk.zip
