@@ -53,7 +53,7 @@ class _DashBoardState extends State<DashBoard> {
       onWillPop: () async => true,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("DASHBOARD PAGE"),
+          title: Text("Ahoy!!"),
           elevation: 0.1,
         ),
         body: Column(
