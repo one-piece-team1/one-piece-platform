@@ -1,8 +1,3 @@
 [build]
-	command = "if cd flutter; then git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi && flutter/bin/flutter build web"
+	command = "if cd flutter; then git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi && flutter/bin/flutter build web && echo '/* /index.html 200' | cat >build/web/_redirects"
 	publish = "build/web"
-
-[[redirects]]
-	from = "/*"
-	to = "/:splat"
-	status = 200
