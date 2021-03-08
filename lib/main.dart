@@ -14,7 +14,7 @@ import 'package:one_piece_platform/ui/screens/user/user_info.dart';
 import 'package:one_piece_platform/ui/screens/welcome.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
-import 'package:url_strategy/url_strategy.dart';
+//import 'package:url_strategy/url_strategy.dart';
 
 import 'core/models/user_model.dart';
 import 'core/util/shared_preference.dart';
@@ -24,7 +24,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences().init();
 // Remove hash from url
-  setPathUrlStrategy();
+//  setPathUrlStrategy();
   runApp(OnePiecePlatform());
 }
 
