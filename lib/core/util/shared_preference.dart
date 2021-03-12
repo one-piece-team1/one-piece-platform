@@ -1,4 +1,4 @@
-import 'package:one_piece_platform/core/models/user_model.dart';
+import 'package:one_piece_platform/core/models/user/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 

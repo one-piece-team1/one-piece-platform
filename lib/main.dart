@@ -15,7 +15,7 @@ import 'package:one_piece_platform/ui/screens/welcome.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
-import 'core/models/user_model.dart';
+import 'core/models/user/user_model.dart';
 import 'core/util/shared_preference.dart';
 
 Future<void> main() async {

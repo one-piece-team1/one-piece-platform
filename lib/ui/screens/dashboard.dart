@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:one_piece_platform/core/models/user_model.dart';
+import 'package:one_piece_platform/core/models/user/user_model.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
