@@ -45,21 +45,21 @@ class UserById {
     @required this.followingCount,
   });
 
-  factory UserById.fromJson(Map<String, dynamic> responseData) {
+  factory UserById.fromJson(Map<String, dynamic> parsedJson) {
     return UserById(
-      id: responseData['user']['id'],
-      role: responseData['user']['role'],
-      diamondCoin: responseData['user']['diamondCoin'],
-      goldCoin: responseData['user']['goldCoin'],
-      username: responseData['user']['username'],
-      email: responseData['user']['email'],
-      gender: responseData['user']['gender'],
-      status: responseData['user']['status'],
-      age: responseData['user']['age'],
-      desc: responseData['user']['desc'],
-      profileImage: responseData['user']['profileImage'],
-      followerCount: responseData['user']['followerCount'],
-      followingCount: responseData['user']['followingCount'],
+      id: parsedJson['user']['id'],
+      role: parsedJson['user']['role'],
+      diamondCoin: parsedJson['user']['diamondCoin'],
+      goldCoin: parsedJson['user']['goldCoin'],
+      username: parsedJson['user']['username'],
+      email: parsedJson['user']['email'],
+      gender: parsedJson['user']['gender'],
+      status: parsedJson['user']['status'],
+      age: parsedJson['user']['age'],
+      desc: parsedJson['user']['desc'],
+      profileImage: parsedJson['user']['profileImage'],
+      followerCount: parsedJson['user']['followerCount'],
+      followingCount: parsedJson['user']['followingCount'],
     );
   }
 }
