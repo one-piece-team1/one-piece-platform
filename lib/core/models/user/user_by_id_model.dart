@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:one_piece_platform/core/models/common/base.dart';
 
-class UserById {
+class UserById extends Base {
   String id;
   String role;
   int diamondCoin;

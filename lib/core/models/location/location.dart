@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:one_piece_platform/core/models/common/base.dart';
 import 'package:one_piece_platform/core/models/enums/location.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'country.dart';
@@ -6,7 +7,7 @@ import 'point.dart';
 //part 'location.g.dart';
 
 //@JsonSerializable()
-class Location {
+class Location extends Base {
   final String id;
   final Point point;
   final Point pointSrid;

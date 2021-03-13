@@ -15,12 +15,12 @@ class User {
     this.role = '',
   });
 
-  factory User.fromJson(Map<String, dynamic> responseData) {
+  factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
-        id: responseData['user']['id'],
-        username: responseData['user']['username'],
-        email: responseData['user']['email'],
-        licence: responseData['user']['licence'],
-        role: responseData['user']['role']);
+        id: parsedJson['user']['id'],
+        username: parsedJson['user']['username'],
+        email: parsedJson['user']['email'],
+        licence: parsedJson['user']['licence'],
+        role: parsedJson['user']['role']);
   }
 }

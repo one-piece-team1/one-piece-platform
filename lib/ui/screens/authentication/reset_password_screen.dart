@@ -8,7 +8,7 @@ import 'package:one_piece_platform/core/util/widgets.dart';
 import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/components/input/text_form_field_input.dart';
 import 'package:one_piece_platform/ui/screens/authentication/forgot_password_screen.dart';
-import 'package:one_piece_platform/ui/styles/CustomTextStyle.dart';
+import 'package:one_piece_platform/ui/styles/custom_text_style.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
