@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Container(
                 height: screenSize.height * 0.2,
-                color: Color(0xFF334D92),
+                decoration: k.kLinearDecoColor,
               ),
               Form(
                 key: formKey,
@@ -302,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   backgroundColor:
-                  Color(0xFF334D92), //You can make this transparent
+                  Colors.transparent, //You can make this transparent
                   elevation: 0.0, //No shadow
                 ),
               ),

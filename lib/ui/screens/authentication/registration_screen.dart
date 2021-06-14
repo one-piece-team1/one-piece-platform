@@ -230,7 +230,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: <Widget>[
                 Container(
                   height: screenSize.height * 0.2,
-                  color: Colors.grey[600],
+                  decoration: k.kLinearDecoColor,
                 ),
                 Form(
                   key: formKey,
@@ -249,7 +249,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           borderRadius: BorderRadius.circular(20),
                           child: Container(
                             height: screenSize.height * 0.1,
-                            child: Image.asset('images/logo.png'),
+                            child: Image.asset('images/ahoy_icon.png'),
                           ),
                         ),
                         SizedBox(

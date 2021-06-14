@@ -41,3 +41,9 @@ const kBackgroundColor = Colors.grey;
 const kPrimaryBlue = const Color(0xFF2554CE);
 const kPrimaryWhite = Colors.white;
 const kIconPrimaryColor = const Color(0xFF414141);
+const kLinearDecoColor = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0xFF1446C7), Color(0xFF062574)],
+),);
