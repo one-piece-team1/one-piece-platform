@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:one_piece_platform/core/api/api.dart';
-import 'package:one_piece_platform/core/models/user_model.dart';
+import 'package:one_piece_platform/core/models/user/user_model.dart';
 import 'package:one_piece_platform/core/provider/auth.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/core/util/firebase_auth.dart';

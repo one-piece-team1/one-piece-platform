@@ -7,7 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 import 'package:provider/provider.dart';
-import 'package:one_piece_platform/core/models/user_model.dart' as CurrentUser;
+import 'package:one_piece_platform/core/models/user/user_model.dart'
+    as CurrentUser;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:one_piece_platform/core/api/user_api.dart';
 import 'package:one_piece_platform/core/models/auth_model.dart';
-import 'package:one_piece_platform/core/models/user_model.dart';
+import 'package:one_piece_platform/core/models/user/user_model.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 
 enum Status {
