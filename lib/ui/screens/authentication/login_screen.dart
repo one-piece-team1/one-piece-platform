@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -64,12 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
-    // jump between controls with 'tab' in flutter for web
-    document.addEventListener('keydown', (dynamic event) {
-      if (event.code == 'Tab') {
-        event.preventDefault();
-      }
-    });
 
     final emailField = TextFormField(
       autofocus: false,

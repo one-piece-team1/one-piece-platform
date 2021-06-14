@@ -30,7 +30,7 @@ dynamic get apiOAuthBaseUrl {
 }
 
 Map<String, dynamic> devConstants = {
-  _baseUrl: "http://localhost:8080/v1/api",
+  _baseUrl: "http://10.0.2.2:8080/v1/api",
   _oAuthBaseUrl: "http://localhost:7071/users"
 };
 

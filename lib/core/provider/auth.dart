@@ -39,10 +39,11 @@ class AuthProvider with ChangeNotifier {
     var responseData = response.data;
 
     if (response.statusCode == 201) {
-      Auth token = Auth.fromJson(responseData["accessToken"]);
+      Auth token = Auth.fromJson(responseData["message"]);
+      // save user token
       UserPreferences().saveToken = token.accessToken;
 
-// get user's information
+      // get user's information
       Response getUserRes = await UserApi().getUser(token);
       var getUserData = getUserRes.data;
       User authUser = User.fromJson(getUserData["message"]);
