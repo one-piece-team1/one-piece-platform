@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Container(
                 height: screenSize.height * 0.2,
-                color: Colors.grey[600],
+                color: Color(0xFF334D92),
               ),
               Form(
                 key: formKey,
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(20),
                         child: Container(
                           height: screenSize.height * 0.1,
-                          child: Image.asset('images/logo.png'),
+                          child: Image.asset('images/ahoy_icon.png'),
                         ),
                       ),
                       SizedBox(
@@ -302,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   backgroundColor:
-                      Colors.grey[800], //You can make this transparent
+                  Color(0xFF334D92), //You can make this transparent
                   elevation: 0.0, //No shadow
                 ),
               ),
