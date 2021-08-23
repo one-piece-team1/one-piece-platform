@@ -238,131 +238,136 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     padding: EdgeInsets.symmetric(
                       horizontal: screenSize.height * 0.06,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          height: screenSize.height * 0.15,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            height: screenSize.height * 0.1,
-                            child: Image.asset('images/ahoy_icon.png'),
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenSize.height * 0.05,
-                        ),
-                        Text(
-                          'Register with',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            height: 1.0,
-                            fontSize: screenSize.height * 0.02,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenSize.height * 0.01,
-                        ),
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              googleOAuth,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            SizedBox(
+                              height: screenSize.height * 0.15,
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                height: screenSize.height * 0.1,
+                                child: Image.asset('images/ahoy_icon.png'),
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.05,
+                            ),
+                            Text(
+                              'Register with',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                height: 1.0,
+                                fontSize: screenSize.height * 0.02,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.01,
+                            ),
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  googleOAuth,
 //                        fbOAuth, // fb signIn not support in Flutter web
 //                appleOAuth,
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: screenSize.height * 0.02),
-                        Row(children: <Widget>[
-                          Expanded(child: Divider()),
-                          Text(
-                            'OR',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: screenSize.height * 0.025,
-                              color: Colors.grey[700],
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(child: Divider()),
-                        ]),
-                        SizedBox(height: screenSize.height * 0.02),
-                        label("User Name"),
-                        SizedBox(
-                          height: screenSize.height * 0.01,
-                        ),
-                        usernameField,
-                        SizedBox(height: screenSize.height * 0.02),
-                        label("Email"),
-                        SizedBox(
-                          height: screenSize.height * 0.01,
-                        ),
-                        emailField,
-                        SizedBox(height: screenSize.height * 0.02),
-                        label("Password"),
-                        SizedBox(height: screenSize.height * 0.01),
-                        passwordField,
-                        SizedBox(height: screenSize.height * 0.02),
-                        label("Confirm your password"),
-                        SizedBox(height: screenSize.height * 0.01),
-                        confirmPassword,
-                        SizedBox(height: screenSize.height * 0.025),
-                        longButtons("Register", doRegister),
-                        SizedBox(height: screenSize.height * 0.02),
-                        Center(
-                          child: RichText(
-                            text: TextSpan(
-                              style: k.kTextDefaultStyle,
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text:
-                                        'By clicking Sign Up, you agree to our '),
-                                TextSpan(
-                                    text: 'Terms of Service',
-                                    style: k.kLinkStyle,
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        print('Terms of Service');
-                                      }),
-                                TextSpan(text: ' and that you have read our '),
-                                TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: k.kLinkStyle,
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        print('Privacy Policy');
-                                      }),
-                              ],
+                            SizedBox(height: screenSize.height * 0.02),
+                            Row(children: <Widget>[
+                              Expanded(child: Divider()),
+                              Text(
+                                'OR',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenSize.height * 0.025,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              Expanded(child: Divider()),
+                            ]),
+                            SizedBox(height: screenSize.height * 0.02),
+                            label("User Name"),
+                            SizedBox(
+                              height: screenSize.height * 0.01,
                             ),
-                          ),
-                        ),
-                        SizedBox(height: screenSize.height * 0.01),
-                        Divider(),
-                        SizedBox(height: screenSize.height * 0.01),
-                        Center(
-                          child: RichText(
-                            text: TextSpan(
-                              style: k.kTextDefaultStyle,
-                              children: <TextSpan>[
-                                TextSpan(text: 'Already have an account?  '),
-                                TextSpan(
-                                    text: 'Login',
-                                    style: k.kLinkStyle,
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Navigator.pushNamed(
-                                            context, LoginScreen.id);
-                                      }),
-                              ],
+                            usernameField,
+                            SizedBox(height: screenSize.height * 0.02),
+                            label("Email"),
+                            SizedBox(
+                              height: screenSize.height * 0.01,
                             ),
-                          ),
+                            emailField,
+                            SizedBox(height: screenSize.height * 0.02),
+                            label("Password"),
+                            SizedBox(height: screenSize.height * 0.01),
+                            passwordField,
+                            SizedBox(height: screenSize.height * 0.02),
+                            label("Confirm your password"),
+                            SizedBox(height: screenSize.height * 0.01),
+                            confirmPassword,
+                            SizedBox(height: screenSize.height * 0.025),
+                            longButtons("Register", doRegister),
+                            SizedBox(height: screenSize.height * 0.02),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: k.kTextDefaultStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text:
+                                            'By clicking Sign Up, you agree to our '),
+                                    TextSpan(
+                                        text: 'Terms of Service',
+                                        style: k.kLinkStyle,
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            print('Terms of Service');
+                                          }),
+                                    TextSpan(text: ' and that you have read our '),
+                                    TextSpan(
+                                        text: 'Privacy Policy',
+                                        style: k.kLinkStyle,
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            print('Privacy Policy');
+                                          }),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.01),
+                            Divider(),
+                            SizedBox(height: screenSize.height * 0.01),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: k.kTextDefaultStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(text: 'Already have an account?  '),
+                                    TextSpan(
+                                        text: 'Login',
+                                        style: k.kLinkStyle,
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.pushNamed(
+                                                context, LoginScreen.id);
+                                          }),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.05),
+                          ],
                         ),
-                        SizedBox(height: screenSize.height * 0.05),
-                      ],
+                      ),
                     ),
                   ),
                 )

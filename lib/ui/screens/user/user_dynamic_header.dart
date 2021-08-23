@@ -286,7 +286,7 @@ class UserDynamicHeader extends SliverPersistentHeaderDelegate {
                           Container(
                             width: queryData.size.width,
                             child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Center(
 //                                alignment: Alignment.center,
                                 child: ExpandableText(

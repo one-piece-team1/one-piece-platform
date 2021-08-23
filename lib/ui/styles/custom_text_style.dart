@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomTextStyle {
+  static TextStyle headline3(BuildContext context) {
+    return Theme.of(context).textTheme.headline3.copyWith(
+        fontSize: 16.0,
+        fontFamily: 'Noto Sans TC',
+        fontWeight: FontWeight.normal,
+        color: Colors.black);
+  }
+
   static TextStyle headline4(BuildContext context) {
     return Theme.of(context).textTheme.headline4.copyWith(fontSize: 34.0);
   }

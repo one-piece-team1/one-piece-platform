@@ -13,7 +13,6 @@ class UserPreferences {
 
   set saveToken(String accessToken) {
     _sharedPrefs.setString('accessToken', "Bearer " + accessToken);
-    print("token preference");
   }
 
   set isAuth(bool isAuth) {
@@ -27,7 +26,6 @@ class UserPreferences {
     _sharedPrefs.setString("licence", user.licence);
     _sharedPrefs.setString("role", user.role);
 
-    print("user preference");
   }
 
   Future<User> getUser() async {

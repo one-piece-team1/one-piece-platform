@@ -13,6 +13,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart' as k;
+import 'login_screen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   static const String id = 'reset_password';
@@ -27,7 +28,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   String _password, _confirmPassword;
   bool showSpinner = false;
-  bool showVerifyCodeFiled = false;
   BaseApi baseApi = new BaseApi();
 
   FocusNode _passwordFocusNode;
@@ -93,15 +93,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       if (form.validate()) {
         form.save();
 
-        //TODO: forgot password step3
-        final Map<String, String> forgetPassStep3Data = {
-          'key': arguments['verifyCode'],
-          'password': _password,
-        };
+        // TODO: call forgot password step3 api
 
+        await auth
+            .forgetPasswordStep3(arguments['verifyCode'], _password)
+            .then((response) {
+          print(response.toString());
+          Navigator.pushNamed(context, LoginScreen.id);
+
+        });
         // Show verification input
         setState(() {
-          showVerifyCodeFiled = true;
           showSpinner = false;
         });
       } else {
@@ -123,33 +125,34 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         child: Stack(children: [
           Form(
             key: formKey,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenSize.height * 0.06,
-                vertical: screenSize.height * 0.1,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SizedBox(
-                    height: screenSize.height * 0.02,
-                  ),
-                  label("New Password"),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
-                  passwordField,
-                  label("Confirm Password"),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
-                  confirmPasswordField,
-                  SizedBox(
-                    height: screenSize.height * 0.15,
-                  ),
-                  longButtons("Confirm", resetPassword),
-                ],
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenSize.height * 0.06,
+                  vertical: screenSize.height * 0.2,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      height: screenSize.height * 0.02,
+                    ),
+                    label("New Password"),
+                    SizedBox(
+                      height: screenSize.height * 0.01,
+                    ),
+                    passwordField,
+                    SizedBox(
+                      height: screenSize.height * 0.01,
+                    ),
+                    label("Confirm Password"),
+                    SizedBox(
+                      height: screenSize.height * 0.01,
+                    ),
+                    confirmPasswordField,
+                  ],
+                ),
               ),
             ),
           ),
@@ -164,11 +167,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 onPressed: () => Navigator.pushReplacementNamed(
                     context, ForgotPasswordScreen.id),
               ),
-              backgroundColor: Colors.grey[800],
+              backgroundColor: k.kPrimaryBlue,
               elevation: 0.0, //No shadow
             ),
           )
         ]),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: longButtons("Confirm", resetPassword),
+        ),
+        shape: CircularNotchedRectangle(),
+        color: Colors.transparent,
       ),
     );
     ;

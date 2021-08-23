@@ -68,6 +68,8 @@ class BaseApi {
     _initializeBaseApi();
 
     String accessToken = UserPreferences().getToken;
+    print('accessToken');
+    print(accessToken);
 
     final BaseOptions baseOptions = new BaseOptions(
         baseUrl: baseURL,

@@ -15,6 +15,11 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart' as k;
 
+enum ActionType {
+  Verify,
+  SendVerifyCode,
+}
+
 class ForgotPasswordScreen extends StatefulWidget {
   static const String id = 'forgot_password';
 
@@ -27,6 +32,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String _email, _verifyCode, _password;
   bool showSpinner = false;
   bool showVerifyCodeFiled = false;
+  ActionType actionType = ActionType.Verify;
+  Function actionFn = () {};
   BaseApi baseApi = new BaseApi();
   FocusNode _emailFocusNode;
   FocusNode _verifyCodeFocusNode;
@@ -83,13 +90,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (form.validate()) {
         form.save();
         //TODO: forgot password step1
-//        await auth.forgetPasswordStep1(_email).then((response) {
-//          print(response.toString());
-////          print(response["message"].toString());
-//        });
+        print('_email');
+
+        print(_email);
+
+        await auth.forgetPasswordStep1(_email).then((response) {
+          print(response.toString());
+//          print(response["message"].toString());
+        });
         // Show verification input
         setState(() {
-          showVerifyCodeFiled = true;
+          // showVerifyCodeFiled = true;
+          actionType = ActionType.SendVerifyCode;
           showSpinner = false;
         });
       } else {
@@ -111,21 +123,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       });
 
       if (form.validate()) {
-        print('validated!!');
+        print('verify code validated!!');
         form.save();
 
-        //TODO: forgot password step2
-        final Map<String, String> forgetPassStep2Data = {
-          'key': _verifyCode,
-        };
 //        TODO: call send verify code api
-
-        setState(() {
-          showSpinner = false;
+        await auth.forgetPasswordStep2(_verifyCode).then((response) {
+          print(response.toString());
+//          print(response["message"].toString());
+          setState(() {
+            showSpinner = false;
+          });
+//        TODO: push and send over verifyCode to reset password screen
+          Navigator.pushNamed(context, ResetPasswordScreen.id,
+              arguments: {'verifyCode': _verifyCode});
         });
-//        TODO: push and send over verifiyCode to reset password screen
-        Navigator.pushNamed(context, ResetPasswordScreen.id,
-            arguments: {'verifyCode': _verifyCode});
       } else {
         setState(() {
           showSpinner = false;
@@ -138,6 +149,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         }, duration: kNotificationDuration);
       }
     };
+
+    MaterialButton Function(ActionType actionType) showLongButton =
+        (actionType) {
+      switch (actionType) {
+        case ActionType.Verify:
+          return longButtons('Confirm', sendVerifyEmail);
+        case ActionType.SendVerifyCode:
+          return longButtons('Send Verification Code', sendVerifyCode);
+        default:
+          return longButtons('Confirm', sendVerifyEmail);
+      }
+    };
+
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -147,60 +171,58 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: screenSize.height * 0.06,
-                vertical: screenSize.height * 0.1,
+                vertical: screenSize.height * 0.15,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SizedBox(
-                    height: screenSize.height * 0.02,
-                  ),
-                  Center(
-                    child: Text(
-                      'Please Input your email to get your password back',
-                      style: CustomTextStyle.body1(context),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
-                  label("Email"),
-                  SizedBox(
-                    height: screenSize.height * 0.01,
-                  ),
-                  emailField,
+              child: Container(
+                // alignment: Alignment.center,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(
+                        height: screenSize.height * 0.02,
+                      ),
+                      Center(
+                        child: Text(
+                          'Please Input your email to get your password back',
+                          style: CustomTextStyle.body1(context),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: screenSize.height * 0.01,
+                      ),
+                      label("Email"),
+                      SizedBox(
+                        height: screenSize.height * 0.01,
+                      ),
+                      emailField,
+                      SizedBox(
+                        height: screenSize.height * 0.1,
+                      ),
+                      Visibility(
+                        visible: actionType.toString() == 'ActionType.SendVerifyCode',
+                        child: Column(
+                          children: [
+                            label("Verify Code"),
+                            SizedBox(
+                              height: screenSize.height * 0.01,
+                            ),
+                            Container(width: 100.0, child: verifyCodeField),
+                          ],
+                        ),
+                      ),
 
-                  SizedBox(
-                    height: screenSize.height * 0.2,
+                      // Align(
+                      //   alignment: Alignment.bottomCenter,
+                      //   child: showVerifyCodeFiled
+                      //       ? longButtons("Confirm", sendVerifyCode)
+                      //       : longButtons("Send Verification Code", sendVerifyEmail),
+                      // ),
+                    ],
                   ),
-                  Visibility(
-                      visible: showVerifyCodeFiled,
-                      child: Column(
-                        children: [
-                          label("Verify Code"),
-                          SizedBox(
-                            height: screenSize.height * 0.01,
-                          ),
-                          Container(width: 100.0, child: verifyCodeField),
-                        ],
-                      )),
-//                  SizedBox(
-//                    height: screenSize.height * 0.01,
-//                  ),
-//                  label("New Password"),
-//                  SizedBox(
-//                    height: screenSize.height * 0.01,
-//                  ),
-//                  passwordField,
-                  SizedBox(
-                    height: screenSize.height * 0.15,
-                  ),
-                  showVerifyCodeFiled
-                      ? longButtons("Confirm", sendVerifyCode)
-                      : longButtons("Send Verification Code", sendVerifyEmail),
-                ],
+                ),
               ),
             ),
           ),
@@ -215,13 +237,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 onPressed: () =>
                     Navigator.pushReplacementNamed(context, LoginScreen.id),
               ),
-              backgroundColor: Colors.grey[800],
+              backgroundColor: k.kPrimaryBlue,
               elevation: 0.0, //No shadow
             ),
           )
         ]),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: showLongButton(actionType),
+        ),
+        shape: CircularNotchedRectangle(),
+        color: Colors.transparent,
+      ),
     );
-    ;
   }
 }

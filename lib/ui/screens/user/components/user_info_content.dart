@@ -7,10 +7,10 @@ import 'package:one_piece_platform/ui/components/image/thumbnail.dart';
 import 'package:one_piece_platform/ui/components/listItem/entry_item.dart';
 import 'package:one_piece_platform/ui/screens/user/user_dynamic_header.dart';
 
-import '../../constants.dart';
+import '../../../constants.dart';
 
-class DefaultScaffold extends StatelessWidget {
-  DefaultScaffold({
+class UserInfoContent extends StatelessWidget {
+  UserInfoContent({
     this.showSpinner: false,
 
 //    @required this.contents,

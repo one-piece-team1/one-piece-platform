@@ -5,10 +5,10 @@ import '../../constants.dart';
 class RoundedButton extends StatelessWidget {
   RoundedButton(
       {this.textColor: Colors.white,
-      this.color,
-      this.title,
-      this.shape,
-      @required this.onPressed});
+        this.color,
+        this.title,
+        this.shape,
+        @required this.onPressed});
 
   final Color color;
   final String title;

@@ -6,6 +6,7 @@ import 'package:one_piece_platform/core/provider/user_provider.dart';
 import 'package:one_piece_platform/core/util/shared_preference.dart';
 import 'package:one_piece_platform/ui/components/common/notification_context.dart';
 import 'package:one_piece_platform/ui/screens/authentication/login_screen.dart';
+import 'package:one_piece_platform/ui/screens/trip/trips.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
@@ -51,26 +52,27 @@ class _DashBoardState extends State<DashBoard> {
     };
     return WillPopScope(
       onWillPop: () async => true,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Ahoy!!"),
-          elevation: 0.1,
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 100,
-            ),
-            Center(child: Text(user.email ?? "no email")),
-            SizedBox(height: 100),
-            RaisedButton(
-              onPressed: doLogout,
-              child: Text("Logout"),
-              color: Colors.lightBlueAccent,
-            )
-          ],
-        ),
-      ),
+      child: Trips(),
+      // child: Scaffold(
+      //   appBar: AppBar(
+      //     title: Text("Ahoy!!"),
+      //     elevation: 0.1,
+      //   ),
+      //   body: Column(
+      //     children: [
+      //       SizedBox(
+      //         height: 100,
+      //       ),
+      //       Center(child: Text(user.email ?? "no email")),
+      //       SizedBox(height: 100),
+      //       RaisedButton(
+      //         onPressed: doLogout,
+      //         child: Text("Logout"),
+      //         color: Colors.lightBlueAccent,
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

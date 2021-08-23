@@ -125,11 +125,60 @@ class AuthProvider with ChangeNotifier {
     };
   }
 
+  Future<Map<String, dynamic>> forgetPasswordStep2( String  _verifyCode) async {
+
+
+    final Map<String, String> sendData = {
+      'key': _verifyCode,
+    };
+
+    Response res =
+    await UserApi().forgetPasswordStep2(sendData);
+    var resData = res.data;
+    if (resData['status'] == "success") {
+      return {
+        'status': true,
+        'message': resData["message"],
+      };
+    }
+
+    return {
+      'status': false,
+      'message': 'Fail to call forgetPasswordStep2',
+    };
+  }
+
+
+  Future<Map<String, dynamic>> forgetPasswordStep3( String  _verifyCode,String _password) async {
+
+    final Map<String, String> sendData = {
+      'key': _verifyCode,
+      'password': _password,
+    };
+    print(sendData.toString());
+    Response res =
+    await UserApi().forgetPasswordStep3(sendData);
+    var resData = res.data;
+
+    print(resData.toString());
+    if (resData['status'] == "success") {
+      return {
+        'status': true,
+        'message': resData["message"],
+      };
+    }
+
+    return {
+      'status': false,
+      'message': 'Fail to call forgetPasswordStep3',
+    };
+  }
+
   static Future<FutureOr> onRegisterValue(Response response) async {
     var result;
     var responseData = response.data;
 
-    if (responseData["statusCode"] == 201) {
+    if (responseData["status"] == 201) {
       result = {
         'status': true,
         'message': 'Successfully registered',
